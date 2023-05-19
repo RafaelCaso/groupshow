@@ -11,13 +11,12 @@ import com.groupshow.utilities.Registrar;
 public class GroupShowAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GroupShowAppApplication.class, args);
+//		SpringApplication.run(GroupShowAppApplication.class, args);
 		
 		Registrar registrar = new Registrar();
 		try {
 			registrar.sendEmail();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

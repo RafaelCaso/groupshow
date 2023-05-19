@@ -41,5 +41,11 @@ public class User {
 	
 	@Column(length=9)
 	private String gradeLevel;
+
+	@Column(length=36, nullable=false)
+	private String regTokenID;
+
+	@Column(nullable = false)
+	private Boolean isRegTokenActivated;
 	
 }
