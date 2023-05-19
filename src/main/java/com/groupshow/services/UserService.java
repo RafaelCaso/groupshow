@@ -20,6 +20,7 @@ public class UserService {
 	public User addUser(User user) {
 		String regTokenID = TokenGenerator.createNewToken();
 		user.setRegTokenID(regTokenID);
+		user.setIsRegTokenActivated(false);
 
 		return userRepository.save(user);
 	}
