@@ -2,7 +2,6 @@ package com.groupshow.utilities;
 
 import java.io.IOException;
 
-import com.groupshow.models.User;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -24,9 +23,8 @@ public class Registrar {
 	
 	Mail mail = new Mail(from, subject, to, content);
 	
-	
 	SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
-	
+	System.out.println(System.getenv("SENDGRID_API_KEY"));
 	
 	
 	Request request = new Request();
