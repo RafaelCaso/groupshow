@@ -1,13 +1,12 @@
 package com.groupshow.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.groupshow.models.User;
 import com.groupshow.services.UserService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -20,6 +19,11 @@ public class UserController {
 	@PostMapping("/register")
 	public User addUser(User user) {
 		return userService.addUser(user);
+	}
+
+	@GetMapping("/activate")
+	public Boolean activateUser(@RequestParam(name="regTokenID")String regTokenID) {
+		return userService.activateUser(regTokenID);
 	}
 	
 }
