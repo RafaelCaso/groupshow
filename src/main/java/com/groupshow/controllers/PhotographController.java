@@ -1,5 +1,9 @@
 package com.groupshow.controllers;
 
+import com.groupshow.models.User;
+import com.groupshow.repositories.PhotographRepository;
+import com.groupshow.repositories.UserRepository;
+import com.groupshow.utilities.dto.PhotographDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +17,24 @@ public class PhotographController {
 	
 	@Autowired
 	private PhotographService photographService;
+
+	@Autowired
+	private UserRepository userRepository;
 	
 	@PostMapping("/upload")
-	public Photograph uploadPhotograph(@RequestBody Photograph photograph) {
+	public Photograph uploadPhotograph(@RequestBody PhotographDto photographDto) {
+		User artist = userRepository.findById(photographDto.getArtistID()).orElseThrow(() -> new RuntimeException("User not found."));
+
+		Photograph photograph = new Photograph();
+
+		photograph.setIsPrint(photographDto.getIsPrint());
+		photograph.setWidthInches(photographDto.getWidthInches());
+		photograph.setHeightInches(photographDto.getHeightInches());
+		photograph.setArtworkTitle(photographDto.getArtworkTitle());
+		photograph.setArtistStatement(photographDto.getArtistStatement());
+		photograph.setArtist(artist);
+		photograph.setArtworkURL(photographDto.getArtworkURL());
+
 		return photographService.uploadPhotograph(photograph);
 	}
 	

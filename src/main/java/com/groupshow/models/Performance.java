@@ -14,7 +14,7 @@ public class Performance extends Artwork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int performanceID;
+    private Integer performanceID;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

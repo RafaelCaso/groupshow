@@ -14,7 +14,7 @@ public class Song extends Artwork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int songID;
+    private Integer songID;
 
     @Column(nullable = false)
     private Integer durationMin;

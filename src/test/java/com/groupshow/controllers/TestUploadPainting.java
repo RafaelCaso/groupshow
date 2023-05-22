@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.groupshow.models.Painting;
 import com.groupshow.models.PaintingType;
+import com.groupshow.models.User;
+import com.groupshow.models.UserType;
+import com.groupshow.services.UserService;
+import com.groupshow.utilities.dto.PaintingDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +18,25 @@ public class TestUploadPainting {
     @Autowired
     private PaintingController paintingController;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void testUploadPainting() {
-        Painting painting = new Painting();
+        PaintingDto painting = new PaintingDto();
+        User user = new User();
+
+        user.setUserID(1);
+        user.setEmail("adgadgqg");
+        user.setFirstName("Asgasg");
+        user.setLastName("asdgadsg");
+        user.setGradeLevel("qaegag");
+        user.setMajor("asfg");
+        user.setMinor("asgasg");
+        user.setUserType(UserType.STUDENT);
+
+        userService.addUser(user);
+
 
         painting.setArtworkTitle("TestTitle");
         painting.setArtistStatement("TestStatement");
@@ -24,6 +44,8 @@ public class TestUploadPainting {
         painting.setPaintingType(PaintingType.ACRYLIC);
         painting.setPaintingWidth(45.8);
         painting.setPaintingHeight(80.1);
+        painting.setArtistID(1);
+
 
         Painting savedPainting = paintingController.uploadPainting(painting);
 

@@ -14,7 +14,7 @@ public class Video extends Artwork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int videoID;
+    private Integer videoID;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable=false)

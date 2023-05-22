@@ -16,18 +16,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="photographs")
 public class Photograph extends Artwork {
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int photgraphID;
+	private Integer photographID;
 	
 	@Column(nullable=false)
-	private boolean isPrint;
+	private Boolean isPrint;
 	
 	@Column(nullable=false)
 	private Double widthInches;
 	
 	@Column(nullable=false)
-	private Double lengthInches;
-
+	private Double heightInches;
 }

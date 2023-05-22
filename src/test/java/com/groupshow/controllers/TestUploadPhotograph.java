@@ -2,6 +2,8 @@ package com.groupshow.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.groupshow.utilities.dto.PhotographDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,29 +18,29 @@ public class TestUploadPhotograph {
 	
 	@Test
 	public void testUploadPhotograph() {
-		Photograph photograph = new Photograph();
+		PhotographDto photograph = new PhotographDto();
 		
 		photograph.setArtworkTitle("Test Title");
 		photograph.setArtistStatement("Test Statement");
-		photograph.setArtworkURL("testphotographURL");
-		photograph.setPrint(true);
-		photograph.setLengthInches(8.5);
-		photograph.setWidthInches(11.0);
+		photograph.setArtworkURL("testPhotographURL");
+		photograph.setIsPrint(false);
+		photograph.setHeightInches(36.0);
+		photograph.setWidthInches(24.0);
 		
 		Photograph savedPhotograph = photographController.uploadPhotograph(photograph);
 		
-		assertNotNull(savedPhotograph.getPhotgraphID());
+		assertNotNull(savedPhotograph.getPhotographID());
 		assertNotNull(savedPhotograph.getArtworkTitle());
 		assertNotNull(savedPhotograph.getArtworkURL());
-		assertNotNull(savedPhotograph.getLengthInches());
+		assertNotNull(savedPhotograph.getHeightInches());
 		assertNotNull(savedPhotograph.getWidthInches());
-		assertNotNull(savedPhotograph.isPrint());
+		assertNotNull(savedPhotograph.getIsPrint());
 		assertEquals(photograph.getArtworkTitle(), savedPhotograph.getArtworkTitle());
 		assertEquals(photograph.getArtistStatement(), savedPhotograph.getArtistStatement());
 		assertEquals(photograph.getArtworkURL(), savedPhotograph.getArtworkURL());
-		assertEquals(photograph.isPrint(), savedPhotograph.isPrint());
-		assertEquals(photograph.getLengthInches(), savedPhotograph.getLengthInches());
+		assertEquals(photograph.getIsPrint(), savedPhotograph.getIsPrint());
+		assertEquals(photograph.getHeightInches(), savedPhotograph.getHeightInches());
 		assertEquals(photograph.getWidthInches(), savedPhotograph.getWidthInches());
 	}
-	
+
 }

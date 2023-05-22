@@ -21,7 +21,7 @@ public class Writing extends Artwork {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int writingID;
+	private Integer writingID;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

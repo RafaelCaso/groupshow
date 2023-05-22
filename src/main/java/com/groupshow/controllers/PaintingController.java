@@ -21,7 +21,7 @@ public class PaintingController {
 
     @PostMapping("/upload")
     public Painting uploadPainting(@RequestBody PaintingDto paintingDto) {
-        User artist = userRepository.findById(paintingDto.getArtistID()).orElseThrow(() -> new RuntimeException("User does not exist."));
+        User artist = userRepository.findById(paintingDto.getArtistID()).orElseThrow(() -> new RuntimeException("User not found."));
 
         Painting painting = new Painting();
 
