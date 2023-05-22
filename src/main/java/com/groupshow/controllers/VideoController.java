@@ -3,10 +3,7 @@ package com.groupshow.controllers;
 import com.groupshow.models.Video;
 import com.groupshow.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/video")
@@ -17,7 +14,7 @@ public class VideoController {
     private VideoService videoService;
 
     @PostMapping("/upload")
-    public Video uploadVideo(Video video) {
+    public Video uploadVideo(@RequestBody Video video) {
         return videoService.uploadVideo(video);
     }
 }

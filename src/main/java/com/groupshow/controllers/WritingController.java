@@ -1,10 +1,7 @@
 package com.groupshow.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.groupshow.models.Writing;
 import com.groupshow.services.WritingService;
@@ -18,7 +15,7 @@ public class WritingController {
 	private WritingService writingService;
 	
 	@PostMapping("upload")
-	public Writing uploadWriting(Writing writing) {
+	public Writing uploadWriting(@RequestBody Writing writing) {
 		return writingService.uploadWriting(writing);
 	}
 	

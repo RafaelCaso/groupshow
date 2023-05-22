@@ -1,12 +1,11 @@
 package com.groupshow.controllers;
 
+import com.groupshow.utilities.dto.UserArtworkDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.groupshow.models.User;
 import com.groupshow.services.UserService;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -24,6 +23,11 @@ public class UserController {
 	@GetMapping("/activate")
 	public Boolean activateUser(@RequestParam(name="regTokenID")String regTokenID) {
 		return userService.activateUser(regTokenID);
+	}
+
+	@GetMapping("/{userID}/submitted-artwork")
+	public UserArtworkDto retrieveAllSubmittedArtwork(@PathVariable int userID) {
+		return userService.retrieveAllSubmittedArtwork(userID);
 	}
 	
 }

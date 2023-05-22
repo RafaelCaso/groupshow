@@ -1,16 +1,12 @@
 package com.groupshow.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +17,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private int userID;
 	
 	@Enumerated(EnumType.STRING)
@@ -45,10 +42,35 @@ public class User {
 	@Column(length=9)
 	private String gradeLevel;
 
-	@Column(length=36, nullable=false)
+	@Column(name = "reg_token_id", length=36, nullable=false)
 	private String regTokenID;
 
 	@Column(nullable = false)
 	private Boolean isRegTokenActivated;
-	
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Painting> paintings;
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Performance> performances;
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Photograph> photographs;
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Song> songs;
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Video> videos;
+
+	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Writing> writings;
+
+
 }
