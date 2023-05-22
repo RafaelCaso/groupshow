@@ -1,12 +1,12 @@
 package com.groupshow.controllers;
 
 import com.groupshow.models.Painting;
+import com.groupshow.models.User;
+import com.groupshow.repositories.UserRepository;
 import com.groupshow.services.PaintingService;
+import com.groupshow.utilities.dto.PaintingDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/painting")
@@ -16,8 +16,23 @@ public class PaintingController {
     @Autowired
     private PaintingService paintingService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/upload")
-    public Painting uploadPainting(Painting painting) {
+    public Painting uploadPainting(@RequestBody PaintingDto paintingDto) {
+        User artist = userRepository.findById(paintingDto.getArtistID()).orElseThrow(() -> new RuntimeException("User does not exist."));
+
+        Painting painting = new Painting();
+
+        painting.setPaintingType(paintingDto.getPaintingType());
+        painting.setPaintingWidth(paintingDto.getPaintingWidth());
+        painting.setPaintingHeight(paintingDto.getPaintingHeight());
+        painting.setArtworkTitle(paintingDto.getArtworkTitle());
+        painting.setArtistStatement(paintingDto.getArtistStatement());
+        painting.setArtist(artist);
+        painting.setArtworkURL(paintingDto.getArtworkURL());
+
         return paintingService.uploadPainting(painting);
     }
 }
