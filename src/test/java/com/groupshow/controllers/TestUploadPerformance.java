@@ -3,6 +3,7 @@ package com.groupshow.controllers;
 import com.groupshow.models.Performance;
 import com.groupshow.models.PerformanceType;
 
+import com.groupshow.utilities.dto.PerformanceDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ public class TestUploadPerformance {
 
     @Test
     public void testUploadPerformance() {
-        Performance performance = new Performance();
+        PerformanceDto performance = new PerformanceDto();
 
         performance.setArtworkTitle("TestTitle");
         performance.setArtistStatement("TestStatement");

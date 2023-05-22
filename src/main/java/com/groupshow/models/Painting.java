@@ -15,7 +15,7 @@ public class Painting extends Artwork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int paintingID;
+    private Integer paintingID;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

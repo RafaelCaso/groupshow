@@ -18,7 +18,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private int userID;
+	private Integer userID;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)

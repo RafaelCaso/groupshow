@@ -23,12 +23,14 @@ public class TestUploadPainting {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void testUploadPainting() {
         PaintingDto painting = new PaintingDto();
-        
         User user = new User();
-        
+       
         user.setUserID(1);
         user.setEmail("adgadgqg");
         user.setFirstName("Asgasg");
@@ -37,8 +39,7 @@ public class TestUploadPainting {
         user.setMajor("asfg");
         user.setMinor("asgasg");
         user.setUserType(UserType.STUDENT);
-        
-        
+
         userService.addUser(user);
         
         painting.setArtistID(1);
@@ -48,6 +49,7 @@ public class TestUploadPainting {
         painting.setPaintingType(PaintingType.ACRYLIC);
         painting.setPaintingWidth(45.8);
         painting.setPaintingHeight(80.1);
+
 
         Painting savedPainting = paintingController.uploadPainting(painting);
 
