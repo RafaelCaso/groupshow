@@ -1,7 +1,6 @@
 package com.groupshow.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,8 +14,9 @@ public abstract class Artwork {
 
     private String artistStatement;
 
-    @Column(nullable = false)
-    private int artistID;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User artist;
 
     // @Column(nullable = false)
     private Date submissionDate;

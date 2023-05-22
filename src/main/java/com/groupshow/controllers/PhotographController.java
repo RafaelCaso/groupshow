@@ -1,10 +1,7 @@
 package com.groupshow.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.groupshow.models.Photograph;
 import com.groupshow.services.PhotographService;
@@ -18,7 +15,7 @@ public class PhotographController {
 	private PhotographService photographService;
 	
 	@PostMapping("/upload")
-	public Photograph uploadPhotograph(Photograph photograph) {
+	public Photograph uploadPhotograph(@RequestBody Photograph photograph) {
 		return photographService.uploadPhotograph(photograph);
 	}
 	

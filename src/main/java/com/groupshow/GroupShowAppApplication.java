@@ -13,12 +13,12 @@ public class GroupShowAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GroupShowAppApplication.class, args);
 		
-		Registrar registrar = new Registrar();
-		try {
-			registrar.sendEmail();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		Registrar registrar = new Registrar();
+//		try {
+//			registrar.sendEmail();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }
