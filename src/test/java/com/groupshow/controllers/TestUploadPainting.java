@@ -9,6 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.Painting;
 import com.groupshow.models.PaintingType;
+import com.groupshow.models.User;
+import com.groupshow.models.UserType;
+import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.PaintingDto;
 
 @SpringBootTest
@@ -16,11 +19,29 @@ public class TestUploadPainting {
 
     @Autowired
     private PaintingController paintingController;
+    
+    @Autowired
+    private UserService userService;
 
     @Test
     public void testUploadPainting() {
         PaintingDto painting = new PaintingDto();
-
+        
+        User user = new User();
+        
+        user.setUserID(1);
+        user.setEmail("adgadgqg");
+        user.setFirstName("Asgasg");
+        user.setLastName("asdgadsg");
+        user.setGradeLevel("qaegag");
+        user.setMajor("asfg");
+        user.setMinor("asgasg");
+        user.setUserType(UserType.STUDENT);
+        
+        
+        userService.addUser(user);
+        
+        painting.setArtistID(1);
         painting.setArtworkTitle("TestTitle");
         painting.setArtistStatement("TestStatement");
         painting.setArtworkURL("TestURL");
