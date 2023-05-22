@@ -1,12 +1,14 @@
 package com.groupshow.controllers;
 
-import com.groupshow.models.Song;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.groupshow.models.Song;
+import com.groupshow.utilities.dto.SongDto;
 
 @SpringBootTest
 public class TestUploadSong {
@@ -16,7 +18,7 @@ public class TestUploadSong {
 
     @Test
     public void testUploadSong() {
-        Song song = new Song();
+        SongDto song = new SongDto();
 
         song.setArtworkTitle("TestSong");
         song.setArtistStatement("TestStatement");

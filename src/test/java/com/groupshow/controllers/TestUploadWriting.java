@@ -2,12 +2,14 @@ package com.groupshow.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.Writing;
 import com.groupshow.models.WritingType;
+import com.groupshow.utilities.dto.WritingDto;
 
 @SpringBootTest
 public class TestUploadWriting {
@@ -17,7 +19,7 @@ public class TestUploadWriting {
 	
 	@Test
 	public void testUploadWriting() {
-		Writing writing = new Writing();
+		WritingDto writing = new WritingDto();
 		
 		writing.setArtworkTitle("Test Title");
 		writing.setArtistStatement("Test statement");
@@ -37,7 +39,7 @@ public class TestUploadWriting {
 		assertEquals(savedWriting.getArtworkTitle(), writing.getArtworkTitle());
 		assertEquals(savedWriting.getArtistStatement(), writing.getArtistStatement());
 		assertEquals(savedWriting.getArtworkURL(), writing.getArtworkURL());
-		assertEquals(savedWriting.isFiction(), writing.isFiction());
+		assertEquals(savedWriting.isFiction(), writing.getFiction());
 		assertEquals(savedWriting.getWordCount(), writing.getWordCount());
 		assertEquals(savedWriting.getWritingType(), writing.getWritingType());
 	}

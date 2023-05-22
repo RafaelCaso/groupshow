@@ -2,11 +2,14 @@ package com.groupshow.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import com.groupshow.models.Painting;
-import com.groupshow.models.PaintingType;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.groupshow.models.Painting;
+import com.groupshow.models.PaintingType;
+import com.groupshow.utilities.dto.PaintingDto;
 
 @SpringBootTest
 public class TestUploadPainting {
@@ -16,7 +19,7 @@ public class TestUploadPainting {
 
     @Test
     public void testUploadPainting() {
-        Painting painting = new Painting();
+        PaintingDto painting = new PaintingDto();
 
         painting.setArtworkTitle("TestTitle");
         painting.setArtistStatement("TestStatement");

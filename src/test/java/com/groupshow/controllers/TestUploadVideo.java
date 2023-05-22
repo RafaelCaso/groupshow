@@ -1,13 +1,15 @@
 package com.groupshow.controllers;
 
-import com.groupshow.models.Video;
-import com.groupshow.models.VideoType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.groupshow.models.Video;
+import com.groupshow.models.VideoType;
+import com.groupshow.utilities.dto.VideoDto;
 
 @SpringBootTest
 public class TestUploadVideo {
@@ -17,7 +19,7 @@ public class TestUploadVideo {
 
     @Test
     public void testUploadVideo() {
-        Video video = new Video();
+        VideoDto video = new VideoDto();
 
         video.setArtworkTitle("TestTitle");
         video.setArtistStatement("TestStatement");
