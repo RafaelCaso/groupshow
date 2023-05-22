@@ -2,21 +2,26 @@ package com.groupshow.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.groupshow.models.Painting;
 import com.groupshow.models.PaintingType;
 import com.groupshow.models.User;
 import com.groupshow.models.UserType;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.PaintingDto;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class TestUploadPainting {
 
     @Autowired
     private PaintingController paintingController;
+    
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserService userService;
@@ -25,7 +30,7 @@ public class TestUploadPainting {
     public void testUploadPainting() {
         PaintingDto painting = new PaintingDto();
         User user = new User();
-
+       
         user.setUserID(1);
         user.setEmail("adgadgqg");
         user.setFirstName("Asgasg");
@@ -36,15 +41,14 @@ public class TestUploadPainting {
         user.setUserType(UserType.STUDENT);
 
         userService.addUser(user);
-
-
+        
+        painting.setArtistID(1);
         painting.setArtworkTitle("TestTitle");
         painting.setArtistStatement("TestStatement");
         painting.setArtworkURL("TestURL");
         painting.setPaintingType(PaintingType.ACRYLIC);
         painting.setPaintingWidth(45.8);
         painting.setPaintingHeight(80.1);
-        painting.setArtistID(1);
 
 
         Painting savedPainting = paintingController.uploadPainting(painting);
