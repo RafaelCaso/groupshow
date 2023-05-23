@@ -23,9 +23,6 @@ public class TestUploadPainting {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserService userService;
-
     @Test
     public void testUploadPainting() {
         PaintingDto painting = new PaintingDto();

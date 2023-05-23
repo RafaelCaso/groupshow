@@ -2,6 +2,7 @@ package com.groupshow.utilities;
 
 import java.io.IOException;
 
+import com.groupshow.models.User;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -14,26 +15,28 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Registrar {
 	
-	public void sendEmail() throws IOException {
-		Email from = new Email("groupshow18@gmail.com");
-		String subject = "Registration Link for";
-		Email to = new Email("msatin2009@gmail.com");
+	public static void sendEmail(User user) throws IOException {
+		Email sender = new Email("groupshow18@gmail.com");
+		Email recipient = new Email(user.getEmail());
+		String emailSubject = "Registration Link for " + user.getFirstName() + " " + user.getLastName();
+		Content emailBody = new Content("text/plain", "Congratulations! " +
+				"You have been registered for Group Show.\n\nPlease click the following " +
+				"link to activate your account:\n\n" +
+				"http://localhost:8000/user/activate?regTokenID=" + user.getRegTokenID() + "."
+				);
 
-		Content content = new Content("text/plain", "Test from Mark's codebase");
-
-		Mail mail = new Mail(from, subject, to, content);
+		Mail emailMessage = new Mail(sender, emailSubject, recipient, emailBody);
 
 		Dotenv dotenv = Dotenv.load();
-		String apiKey = dotenv.get("SENDGRID_API_KEY");
-
-		SendGrid sg = new SendGrid(apiKey);
+		String sendgridApiKey = dotenv.get("SENDGRID_API_KEY");
+		SendGrid sg = new SendGrid(sendgridApiKey);
 
 		Request request = new Request();
 
 		try {
 			request.setMethod(Method.POST);
 			request.setEndpoint("mail/send");
-			request.setBody(mail.build());
+			request.setBody(emailMessage.build());
 
 			Response response = sg.api(request);
 			System.out.println(response.getStatusCode());
