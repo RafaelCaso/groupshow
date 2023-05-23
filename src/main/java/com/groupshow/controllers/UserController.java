@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.groupshow.models.User;
 import com.groupshow.services.UserService;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins="http://localhost:3000")
@@ -16,8 +18,8 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/register")
-	public User addUser(@RequestBody User user) {
-		return userService.addUser(user);
+	public void addUser(@RequestBody User user) throws IOException {
+		userService.addUser(user);
 	}
 
 	@GetMapping("/activate")
