@@ -1,5 +1,6 @@
 package com.groupshow.services;
 
+import com.groupshow.utilities.Registrar;
 import com.groupshow.utilities.TokenGenerator;
 import com.groupshow.utilities.dto.UserArtworkDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.groupshow.models.User;
 import com.groupshow.repositories.UserRepository;
 
+import java.io.IOException;
+
 @Service
 @Transactional
 public class UserService {
@@ -16,12 +19,19 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public User addUser(User user) {
+	public void addUser(User user) throws IOException {
 		String regTokenID = TokenGenerator.createNewToken();
 		user.setRegTokenID(regTokenID);
 		user.setIsRegTokenActivated(false);
 
-		return userRepository.save(user);
+		userRepository.save(user);
+
+		User savedUser = retrieveUser(user.getUserID());
+		Registrar.sendEmail(savedUser);
+	}
+
+	public User retrieveUser(Integer userID) {
+		return userRepository.findById(userID).get();
 	}
 
 	public Boolean activateUser(String regTokenID) {
