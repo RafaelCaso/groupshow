@@ -26,6 +26,7 @@ public class TestUploadPhotograph {
 		photograph.setIsPrint(false);
 		photograph.setHeightInches(36.0);
 		photograph.setWidthInches(24.0);
+		photograph.setArtistID(1);
 		
 		Photograph savedPhotograph = photographController.uploadPhotograph(photograph);
 		

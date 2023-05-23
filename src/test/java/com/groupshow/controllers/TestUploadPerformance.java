@@ -28,6 +28,7 @@ public class TestUploadPerformance {
         performance.setDurationMin(40);
         performance.setDurationSec(12);
         performance.setPerformanceType(PerformanceType.CLASSICAL);
+        performance.setArtistID(1);
 
         Performance savedPerformance = performanceController.uploadPerformance(performance);
 
