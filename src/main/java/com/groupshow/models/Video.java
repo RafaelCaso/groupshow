@@ -11,10 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="videos")
 public class Video extends Artwork {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer videoID;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable=false)

@@ -18,10 +18,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="writings")
 public class Writing extends Artwork {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer writingID;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
