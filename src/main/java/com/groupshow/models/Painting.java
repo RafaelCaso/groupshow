@@ -12,10 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="paintings")
 public class Painting extends Artwork {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer paintingID;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

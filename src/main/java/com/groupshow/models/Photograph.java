@@ -16,10 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="photographs")
 public class Photograph extends Artwork {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer photographID;
 	
 	@Column(nullable=false)
 	private Boolean isPrint;

@@ -12,10 +12,6 @@ import lombok.NoArgsConstructor;
 @Table(name="songs")
 public class Song extends Artwork {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer songID;
-
     @Column(nullable = false)
     private Integer durationMin;
 
