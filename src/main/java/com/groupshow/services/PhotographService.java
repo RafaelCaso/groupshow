@@ -17,5 +17,9 @@ public class PhotographService {
 	public Photograph uploadPhotograph(Photograph photograph) {
 		return photographRepository.save(photograph);
 	}
+
+	public Photograph retrievePhotograph(Integer photographID) {
+		return photographRepository.findById(photographID).get();
+	}
 	
 }

@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PerformanceDto {
-    private PerformanceType performanceType;
-    private Integer durationHour;
-    private Integer durationMin;
-    private Integer durationSec;
     private String artworkTitle;
     private String artistStatement;
     private Integer artistID;
     private String artworkURL;
+    private Boolean openForCritique;
+    private PerformanceType performanceType;
+    private Integer durationHour;
+    private Integer durationMin;
+    private Integer durationSec;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class CritiqueDto {
 
 	private String content;
-	private Integer userID;
+	private Integer criticID;
 	private Integer artworkID;
 	
 }

@@ -33,6 +33,7 @@ public class PerformanceController {
         performance.setArtistStatement(performanceDto.getArtistStatement());
         performance.setArtist(artist);
         performance.setArtworkURL(performanceDto.getArtworkURL());
+        performance.setOpenForCritique(performanceDto.getOpenForCritique());
 
         return performanceService.uploadPerformance(performance);
     }

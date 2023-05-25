@@ -34,6 +34,7 @@ public class PhotographController {
 		photograph.setArtistStatement(photographDto.getArtistStatement());
 		photograph.setArtist(artist);
 		photograph.setArtworkURL(photographDto.getArtworkURL());
+		photograph.setOpenForCritique(photographDto.getOpenForCritique());
 
 		return photographService.uploadPhotograph(photograph);
 	}
