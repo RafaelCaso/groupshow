@@ -15,6 +15,10 @@ public class CritiqueService {
 	private CritiqueRepository critiqueRepository;
 	
 	public Critique addCritique(Critique critique) {
-		return critiqueRepository.save(critique);
+		if (critique.getArtwork().getOpenForCritique()) {
+			return critiqueRepository.save(critique);
+		}
+
+		throw new RuntimeException("Artwork is not open for critique.");
 	}
 }

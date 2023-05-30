@@ -21,10 +21,9 @@ import lombok.Data;
 public abstract class Artwork {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "artwork_seq")
-    @SequenceGenerator(name = "artwork_seq", sequenceName = "artwork_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="artwork_id")
-    private Long artworkID;
+    private Integer artworkID;
 	
     @Column(nullable = false)
     private String artworkTitle;

@@ -16,4 +16,8 @@ public class PerformanceService {
     public Performance uploadPerformance(Performance performance) {
         return performanceRepository.save(performance);
     }
+
+    public Performance retrievePerformance(Integer performanceID) {
+        return performanceRepository.findById(performanceID).get();
+    }
 }
