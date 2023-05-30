@@ -1,15 +1,11 @@
 package com.groupshow.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Entity
 @Data
@@ -23,6 +19,14 @@ public class Critique {
 	private Integer critiqueID;
 	
 	private String content;
+
+	@Column(name = "submission_date", nullable = false)
+	private Instant submissionDate;
+
+	@PrePersist
+	public void prePersistSubmissionDate() {
+		submissionDate = Instant.now();
+	}
 	
 	@ManyToOne
     @JoinColumn(name = "user_id")

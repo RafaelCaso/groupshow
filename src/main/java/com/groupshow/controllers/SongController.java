@@ -26,7 +26,6 @@ public class SongController {
 
     @PostMapping("/upload")
     public Song uploadSong(@RequestBody SongDto songDto) {
-    	
     	User artist = userRepository.findById(songDto.getArtistID()).orElseThrow(() -> new RuntimeException("User not found"));
     	
     	Song song = new Song();
