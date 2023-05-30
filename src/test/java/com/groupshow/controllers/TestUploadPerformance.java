@@ -33,7 +33,7 @@ public class TestUploadPerformance {
         Performance savedPerformance = performanceController.uploadPerformance(performance);
 
 
-        assertNotNull(savedPerformance.getPerformanceID());
+        assertNotNull(savedPerformance.getArtworkID());
         assertEquals(performance.getArtworkTitle(), savedPerformance.getArtworkTitle());
         assertNotNull(savedPerformance.getArtworkTitle());
         assertEquals(performance.getArtistStatement(), savedPerformance.getArtistStatement());

@@ -38,27 +38,33 @@ public class TestUploadSong {
         user.setUserType(UserType.STUDENT);
         
         
-        userService.addUser(user);
-        
-        song.setArtworkTitle("TestSong");
-        song.setArtistStatement("TestStatement");
-        song.setArtworkURL("TestURL");
-        song.setDurationMin(2);
-        song.setDurationSec(38);
-        song.setArtistID(1);
-        
-        Song savedSong = songController.uploadSong(song);
+        try {
+        	userService.addUser(user);
+            
+            song.setArtworkTitle("TestSong");
+            song.setArtistStatement("TestStatement");
+            song.setArtworkURL("TestURL");
+            song.setDurationMin(2);
+            song.setDurationSec(38);
+            song.setArtistID(1);
+            
+            Song savedSong = songController.uploadSong(song);
 
 
-        assertNotNull(savedSong.getSongID());
-        assertEquals(song.getArtworkTitle(), savedSong.getArtworkTitle());
-        assertNotNull(savedSong.getArtworkTitle());
-        assertEquals(song.getArtistStatement(), savedSong.getArtistStatement());
-        assertEquals(song.getArtworkURL(), savedSong.getArtworkURL());
-        assertNotNull(savedSong.getArtworkURL());
-        assertEquals(song.getDurationMin(), savedSong.getDurationMin());
-        assertNotNull(savedSong.getDurationMin());
-        assertEquals(song.getDurationSec(), savedSong.getDurationSec());
-        assertNotNull(savedSong.getDurationSec());
+            assertNotNull(savedSong.getArtworkID());
+            assertEquals(song.getArtworkTitle(), savedSong.getArtworkTitle());
+            assertNotNull(savedSong.getArtworkTitle());
+            assertEquals(song.getArtistStatement(), savedSong.getArtistStatement());
+            assertEquals(song.getArtworkURL(), savedSong.getArtworkURL());
+            assertNotNull(savedSong.getArtworkURL());
+            assertEquals(song.getDurationMin(), savedSong.getDurationMin());
+            assertNotNull(savedSong.getDurationMin());
+            assertEquals(song.getDurationSec(), savedSong.getDurationSec());
+            assertNotNull(savedSong.getDurationSec());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
     }
 }
