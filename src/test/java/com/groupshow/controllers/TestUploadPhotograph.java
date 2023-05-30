@@ -30,7 +30,7 @@ public class TestUploadPhotograph {
 		
 		Photograph savedPhotograph = photographController.uploadPhotograph(photograph);
 		
-		assertNotNull(savedPhotograph.getPhotographID());
+		assertNotNull(savedPhotograph.getArtworkID());
 		assertNotNull(savedPhotograph.getArtworkTitle());
 		assertNotNull(savedPhotograph.getArtworkURL());
 		assertNotNull(savedPhotograph.getHeightInches());

@@ -19,7 +19,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void addUser(User user) throws IOException {
+	public User addUser(User user) throws IOException {
 		String regTokenID = TokenGenerator.createNewToken();
 		user.setRegTokenID(regTokenID);
 		user.setIsRegTokenActivated(false);
@@ -28,6 +28,8 @@ public class UserService {
 
 		User savedUser = retrieveUser(user.getUserID());
 		Registrar.sendEmail(savedUser);
+		
+		return savedUser;
 	}
 
 	public User retrieveUser(Integer userID) {

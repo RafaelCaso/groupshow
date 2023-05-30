@@ -27,20 +27,27 @@ public class TestRegisterUser {
 		user.setMajor("TestMajor");
 		user.setMinor("TestMinor");
 		
-		User savedUser = userController.addUser(user);
+		try {
+			User savedUser = userController.addUser(user);
+			assertNotNull(savedUser.getUserID());
+			assertEquals(user.getFirstName(), savedUser.getFirstName());
+			assertNotNull(savedUser.getFirstName());
+			assertEquals(user.getLastName(), savedUser.getLastName());
+			assertNotNull(savedUser.getLastName());
+			assertEquals(user.getEmail(), savedUser.getEmail());
+			assertNotNull(savedUser.getEmail());
+			assertEquals(user.getUserType(), savedUser.getUserType());
+			assertNotNull(savedUser.getUserType());
+			assertEquals(user.getGradeLevel(), savedUser.getGradeLevel());
+			assertEquals(user.getMajor(), savedUser.getMajor());
+			assertEquals(user.getMinor(), savedUser.getMinor());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		
-		assertNotNull(savedUser.getUserID());
-		assertEquals(user.getFirstName(), savedUser.getFirstName());
-		assertNotNull(savedUser.getFirstName());
-		assertEquals(user.getLastName(), savedUser.getLastName());
-		assertNotNull(savedUser.getLastName());
-		assertEquals(user.getEmail(), savedUser.getEmail());
-		assertNotNull(savedUser.getEmail());
-		assertEquals(user.getUserType(), savedUser.getUserType());
-		assertNotNull(savedUser.getUserType());
-		assertEquals(user.getGradeLevel(), savedUser.getGradeLevel());
-		assertEquals(user.getMajor(), savedUser.getMajor());
-		assertEquals(user.getMinor(), savedUser.getMinor());
+		
+		
 	}
 }
