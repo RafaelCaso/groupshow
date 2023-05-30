@@ -28,6 +28,11 @@ public class UserController {
 		return userService.activateUser(regTokenID);
 	}
 
+	@PostMapping("/login")
+	public User loginUser(@RequestParam(name="email")String email, @RequestParam(name="password")String password) {
+		return userService.loginUser(email, password);
+	}
+
 	@GetMapping("/{userID}/submitted-artwork")
 	public UserArtworkDto retrieveAllSubmittedArtwork(@PathVariable int userID) {
 		return userService.retrieveAllSubmittedArtwork(userID);

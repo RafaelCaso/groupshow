@@ -48,6 +48,16 @@ public class UserService {
 		return false;
 	}
 
+	public User loginUser(String email, String password) {
+		User user = userRepository.findByEmail(email);
+
+		if (user.getPassword() != password) {
+			throw new RuntimeException("Invalid credentials.");
+		}
+
+		return user;
+	}
+
 	public UserArtworkDto retrieveAllSubmittedArtwork(int userID) {
 		User user = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found."));
 		UserArtworkDto userArtworkDto = new UserArtworkDto();
