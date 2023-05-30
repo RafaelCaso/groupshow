@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PhotographDto {
-    private Boolean isPrint;
-    private Double widthInches;
-    private Double heightInches;
     private String artworkTitle;
     private String artistStatement;
     private Integer artistID;
     private String artworkURL;
+    private Boolean openForCritique;
+    private Boolean isPrint;
+    private Double widthInches;
+    private Double heightInches;
 }

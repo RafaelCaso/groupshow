@@ -16,4 +16,8 @@ public class VideoService {
     public Video uploadVideo(Video video) {
         return videoRepository.save(video);
     }
+
+    public Video retrieveVideo(Integer videoID) {
+        return videoRepository.findById(videoID).get();
+    }
 }

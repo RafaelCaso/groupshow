@@ -39,6 +39,7 @@ public class VideoController {
     	video.setDurationHour(videoDto.getDurationHour());
     	video.setDurationMin(videoDto.getDurationMin());
     	video.setDurationSec(videoDto.getDurationSec());
+		video.setOpenForCritique(videoDto.getOpenForCritique());
     	
         return videoService.uploadVideo(video);
     }

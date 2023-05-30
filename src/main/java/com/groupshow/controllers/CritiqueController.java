@@ -51,7 +51,7 @@ public class CritiqueController {
 	@PostMapping("/add")
 	public void addCritique(@RequestBody CritiqueDto critiqueDto) {
 		
-		User critic = userRepository.findById(critiqueDto.getUserID()).get();
+		User critic = userRepository.findById(critiqueDto.getCriticID()).get();
 
 		Critique critique = new Critique();
 		critique.setContent(critiqueDto.getContent());
@@ -75,5 +75,16 @@ public class CritiqueController {
 		
 		critiqueService.addCritique(critique);
 	}
+
+
+	// Move this to new ArtworkService or something
+
+//	public void changeOpenForCritique(Critique critique) {
+//		if (critique.getArtwork().getOpenForCritique()) {
+//			critique.getArtwork().setOpenForCritique(false);
+//		} else {
+//			critique.getArtwork().setOpenForCritique(true);
+//		}
+//	}
 	
 }

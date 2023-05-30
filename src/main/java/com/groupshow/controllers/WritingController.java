@@ -38,8 +38,7 @@ public class WritingController {
 		writing.setWritingType(writingDto.getWritingType());
 		writing.setFiction(writingDto.getFiction());
 		writing.setWordCount(writingDto.getWordCount());
-		
-		
+		writing.setOpenForCritique(writingDto.getOpenForCritique());
 		
 		return writingService.uploadWriting(writing);
 	}
