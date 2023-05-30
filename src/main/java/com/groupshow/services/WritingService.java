@@ -17,5 +17,9 @@ public class WritingService {
 	public Writing uploadWriting(Writing writing) {
 		return writingRepository.save(writing);
 	}
+	
+	public Writing retrieveWriting(Integer writingID) {
+		return writingRepository.findById(writingID).get();
+	}
 
 }

@@ -32,6 +32,7 @@ public class PaintingController {
         painting.setArtistStatement(paintingDto.getArtistStatement());
         painting.setArtist(artist);
         painting.setArtworkURL(paintingDto.getArtworkURL());
+        painting.setOpenForCritique(paintingDto.getOpenForCritique());
 
         return paintingService.uploadPainting(painting);
     }
