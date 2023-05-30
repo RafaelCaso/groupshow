@@ -37,6 +37,7 @@ public class SongController {
     	song.setArtworkTitle(songDto.getArtworkTitle());
     	song.setDurationMin(songDto.getDurationMin());
     	song.setDurationSec(songDto.getDurationSec());
+    	song.setOpenForCritique(songDto.getOpenForCritique());
     	
         return songService.uploadSong(song);
     }

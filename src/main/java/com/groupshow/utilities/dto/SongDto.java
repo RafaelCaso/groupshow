@@ -20,4 +20,6 @@ public class SongDto {
 	private Integer durationMin;
 	
 	private Integer durationSec;
+	
+	private Boolean openForCritique;
 }

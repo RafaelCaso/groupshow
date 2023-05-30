@@ -16,4 +16,8 @@ public class PaintingService {
     public Painting uploadPainting(Painting painting) {
         return paintingRepository.save(painting);
     }
+    
+    public Painting retrievePainting(Integer paintingID) {
+    	return paintingRepository.findById(paintingID).get();
+    }
 }

@@ -16,4 +16,8 @@ public class SongService {
     public Song uploadSong(Song song) {
         return songRepository.save(song);
     }
+    
+    public Song retrieveSong(Integer songID) {
+    	return songRepository.findById(songID).get();
+    }
 }

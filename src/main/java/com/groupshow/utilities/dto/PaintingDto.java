@@ -17,4 +17,5 @@ public class PaintingDto {
     private String artistStatement;
     private Integer artistID;
     private String artworkURL;
+    private Boolean openForCritique;
 }
