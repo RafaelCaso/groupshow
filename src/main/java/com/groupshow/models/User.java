@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -52,7 +54,7 @@ public class User {
 	@Column(nullable = false)
 	private Boolean isRegTokenActivated;
 
-	@Column(name = "creation_date", nullable = false)
+	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
 
 	@PrePersist
