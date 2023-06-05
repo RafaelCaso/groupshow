@@ -4,6 +4,7 @@ import com.groupshow.utilities.Registrar;
 import com.groupshow.utilities.TokenGenerator;
 import com.groupshow.utilities.dto.UserArtworkDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +50,8 @@ public class UserService {
 	}
 
 	public User loginUser(String email, String password) {
-		User user = userRepository.findByEmail(email);
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
 		if (user.getPassword() != password) {
 			throw new RuntimeException("Invalid credentials.");

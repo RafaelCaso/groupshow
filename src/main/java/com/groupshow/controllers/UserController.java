@@ -1,14 +1,16 @@
 package com.groupshow.controllers;
 
+import com.groupshow.services.AuthenticationService;
+import com.groupshow.utilities.dto.AuthenticationRequestDto;
+import com.groupshow.utilities.dto.AuthenticationResponseDto;
+import com.groupshow.utilities.dto.RegisterRequestDto;
 import com.groupshow.utilities.dto.UserArtworkDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.groupshow.models.User;
 import com.groupshow.services.UserService;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/user")
@@ -17,10 +19,13 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AuthenticationService authService;
 	
 	@PostMapping("/register")
-	public User addUser(@RequestBody User user) throws IOException {
-		return userService.addUser(user);
+	public ResponseEntity<AuthenticationResponseDto> register(@RequestBody RegisterRequestDto request) {
+		return ResponseEntity.ok(authService.register(request));
 	}
 
 	@GetMapping("/activate")
@@ -29,15 +34,14 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public User loginUser(@RequestParam(name="email")String email, @RequestParam(name="password")String password) {
-		return userService.loginUser(email, password);
+	public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto request) {
+		return ResponseEntity.ok(authService.authenticate(request));
 	}
 
 	@GetMapping("/{userID}/submitted-artwork")
 	public UserArtworkDto retrieveAllSubmittedArtwork(@PathVariable int userID) {
 		return userService.retrieveAllSubmittedArtwork(userID);
 	}
-	
 }
 
 
