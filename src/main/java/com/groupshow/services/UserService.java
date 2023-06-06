@@ -41,11 +41,23 @@ public class UserService {
 		User user = userRepository.findByRegTokenID(regTokenID);
 
 		if (user != null) {
-			user.setIsRegTokenActivated(true);
+			user.isEnabled();
 			userRepository.save(user);
 			return true;
 		}
 
+		return false;
+	}
+	
+	public Boolean resetPassword(Integer userID, String password, String passwordConfirmation) {
+		
+		if(password.equals(passwordConfirmation)) {
+			User user = retrieveUser(userID);
+			user.setPassword(passwordConfirmation);
+			userRepository.save(user);
+			return true;
+		}
+		
 		return false;
 	}
 
