@@ -1,15 +1,24 @@
 package com.groupshow.controllers;
 
-import com.groupshow.services.AuthenticationService;
-import com.groupshow.utilities.dto.AuthenticationRequestDto;
-import com.groupshow.utilities.dto.AuthenticationResponseDto;
-import com.groupshow.utilities.dto.RegisterRequestDto;
-import com.groupshow.utilities.dto.UserArtworkDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.groupshow.models.User;
+import com.groupshow.services.AuthenticationService;
 import com.groupshow.services.UserService;
+import com.groupshow.utilities.dto.AuthenticationRequestDto;
+import com.groupshow.utilities.dto.AuthenticationResponseDto;
+import com.groupshow.utilities.dto.PasswordResetDto;
+import com.groupshow.utilities.dto.RegisterRequestDto;
+import com.groupshow.utilities.dto.UserArtworkDto;
 
 
 @RestController
@@ -31,6 +40,17 @@ public class UserController {
 	@GetMapping("/activate")
 	public Boolean activateUser(@RequestParam(name="regTokenID")String regTokenID) {
 		return userService.activateUser(regTokenID);
+	}
+	
+	@PostMapping("/reset-password")
+	public Boolean resetPassword(@RequestParam(name="userID")Integer userID, @RequestBody PasswordResetDto passwordresetDto)  {
+		
+		if(userService.resetPassword(userID, passwordresetDto.getPassword(), passwordresetDto.getPasswordConfirmation())) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 
 	@PostMapping("/login")

@@ -4,10 +4,15 @@ import com.groupshow.models.User;
 import com.groupshow.models.UserType;
 import com.groupshow.repositories.UserRepository;
 import com.groupshow.security.JwtService;
+import com.groupshow.utilities.Registrar;
+import com.groupshow.utilities.TokenGenerator;
 import com.groupshow.utilities.dto.AuthenticationRequestDto;
 import com.groupshow.utilities.dto.AuthenticationResponseDto;
 import com.groupshow.utilities.dto.RegisterRequestDto;
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +27,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponseDto register(RegisterRequestDto request) {
+    	
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -30,9 +36,20 @@ public class AuthenticationService {
                 .userType(UserType.ADMIN)
                 .build();
 
+        String regTokenID = TokenGenerator.createNewToken();
+		user.setRegTokenID(regTokenID);
+		user.setIsRegTokenActivated(false);
+        
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
+        
+        User savedUser = userRepository.findById(user.getUserID()).get();
+		try {
+			Registrar.sendEmail(savedUser);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         return AuthenticationResponseDto.builder()
                 .token(jwtToken)
