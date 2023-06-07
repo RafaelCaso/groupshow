@@ -29,11 +29,11 @@ public class PhotographController {
 		photograph.setIsPrint(photographDto.getIsPrint());
 		photograph.setWidthInches(photographDto.getWidthInches());
 		photograph.setHeightInches(photographDto.getHeightInches());
-		photograph.setTitle(photographDto.getArtworkTitle());
-		photograph.setArtistStatement(photographDto.getArtistStatement());
+		photograph.setTitle(photographDto.getTitle());
+		photograph.setArtistStatement(photographDto.getStatement());
 		photograph.setArtist(artist);
-		photograph.setUrl(photographDto.getArtworkURL());
-		photograph.setIsOpenForCritique(photographDto.getOpenForCritique());
+		photograph.setUrl(photographDto.getUrl());
+		photograph.setIsOpenForCritique(photographDto.getIsOpenForCritique());
 
 		return photographService.uploadPhotograph(photograph);
 	}

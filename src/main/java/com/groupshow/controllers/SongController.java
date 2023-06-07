@@ -31,12 +31,12 @@ public class SongController {
     	Song song = new Song();
     	
     	song.setArtist(artist);
-    	song.setArtistStatement(songDto.getArtistStatement());
-    	song.setUrl(songDto.getArtworkURL());
-    	song.setTitle(songDto.getArtworkTitle());
+    	song.setArtistStatement(songDto.getStatement());
+    	song.setUrl(songDto.getUrl());
+    	song.setTitle(songDto.getTitle());
     	song.setDurationMin(songDto.getDurationMin());
     	song.setDurationSec(songDto.getDurationSec());
-    	song.setIsOpenForCritique(songDto.getOpenForCritique());
+    	song.setIsOpenForCritique(songDto.getIsOpenForCritique());
     	
         return songService.uploadSong(song);
     }

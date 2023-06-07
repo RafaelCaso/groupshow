@@ -29,11 +29,11 @@ public class PerformanceController {
         performance.setDurationHour(performanceDto.getDurationHour());
         performance.setDurationMin(performanceDto.getDurationMin());
         performance.setDurationSec(performanceDto.getDurationSec());
-        performance.setTitle(performanceDto.getArtworkTitle());
-        performance.setArtistStatement(performanceDto.getArtistStatement());
+        performance.setTitle(performanceDto.getTitle());
+        performance.setArtistStatement(performanceDto.getStatement());
         performance.setArtist(artist);
-        performance.setUrl(performanceDto.getArtworkURL());
-        performance.setIsOpenForCritique(performanceDto.getOpenForCritique());
+        performance.setUrl(performanceDto.getUrl());
+        performance.setIsOpenForCritique(performanceDto.getIsOpenForCritique());
 
         return performanceService.uploadPerformance(performance);
     }

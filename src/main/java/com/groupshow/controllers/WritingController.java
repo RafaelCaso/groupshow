@@ -32,13 +32,13 @@ public class WritingController {
 		Writing writing = new Writing();
 		
 		writing.setArtist(artist);
-		writing.setTitle(writingDto.getArtworkTitle());
-		writing.setArtistStatement(writingDto.getArtistStatement());
-		writing.setUrl(writingDto.getArtworkURL());
+		writing.setTitle(writingDto.getTitle());
+		writing.setArtistStatement(writingDto.getStatement());
+		writing.setUrl(writingDto.getUrl());
 		writing.setType(writingDto.getWritingType());
-		writing.setFiction(writingDto.getFiction());
+		writing.setFiction(writingDto.getIsFiction());
 		writing.setWordCount(writingDto.getWordCount());
-		writing.setIsOpenForCritique(writingDto.getOpenForCritique());
+		writing.setIsOpenForCritique(writingDto.getIsOpenForCritique());
 		
 		return writingService.uploadWriting(writing);
 	}
