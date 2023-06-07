@@ -15,7 +15,7 @@ public class CritiqueService {
 	private CritiqueRepository critiqueRepository;
 	
 	public Critique addCritique(Critique critique) {
-		if (critique.getArtwork().getOpenForCritique()) {
+		if (critique.getArtwork().getIsOpenForCritique()) {
 			return critiqueRepository.save(critique);
 		}
 

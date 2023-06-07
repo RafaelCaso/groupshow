@@ -34,11 +34,11 @@ public class TestUploadPerformance {
 
 
         assertNotNull(savedPerformance.getArtworkID());
-        assertEquals(performance.getArtworkTitle(), savedPerformance.getArtworkTitle());
-        assertNotNull(savedPerformance.getArtworkTitle());
+        assertEquals(performance.getArtworkTitle(), savedPerformance.getTitle());
+        assertNotNull(savedPerformance.getTitle());
         assertEquals(performance.getArtistStatement(), savedPerformance.getArtistStatement());
-        assertEquals(performance.getArtworkURL(), savedPerformance.getArtworkURL());
-        assertNotNull(savedPerformance.getArtworkURL());
+        assertEquals(performance.getArtworkURL(), savedPerformance.getUrl());
+        assertNotNull(savedPerformance.getUrl());
         assertEquals(performance.getDurationHour(), savedPerformance.getDurationHour());
         assertNotNull(savedPerformance.getDurationHour());
         assertEquals(performance.getDurationMin(), savedPerformance.getDurationMin());
@@ -46,6 +46,6 @@ public class TestUploadPerformance {
         assertEquals(performance.getDurationSec(), savedPerformance.getDurationSec());
         assertNotNull(savedPerformance.getDurationSec());
         assertNotNull(performance.getPerformanceType());
-        assertEquals(performance.getPerformanceType(), savedPerformance.getPerformanceType());
+        assertEquals(performance.getPerformanceType(), savedPerformance.getType());
     }
 }

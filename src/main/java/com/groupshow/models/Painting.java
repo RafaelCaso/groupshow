@@ -15,11 +15,11 @@ public class Painting extends Artwork {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaintingType paintingType;
+    private PaintingType type;
 
     @Column(nullable = false)
-    private Double paintingWidth;
+    private Double widthInches;
 
     @Column(nullable = false)
-    private Double paintingHeight;
+    private Double heightInches;
 }

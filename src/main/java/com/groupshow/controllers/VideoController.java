@@ -33,13 +33,13 @@ public class VideoController {
     	
     	video.setArtist(artist);
     	video.setArtistStatement(videoDto.getArtistStatement());
-    	video.setArtworkTitle(videoDto.getArtworkTitle());
-    	video.setArtworkURL(videoDto.getArtworkURL());
-    	video.setVideoType(videoDto.getVideoType());
+    	video.setTitle(videoDto.getArtworkTitle());
+    	video.setUrl(videoDto.getArtworkURL());
+    	video.setType(videoDto.getVideoType());
     	video.setDurationHour(videoDto.getDurationHour());
     	video.setDurationMin(videoDto.getDurationMin());
     	video.setDurationSec(videoDto.getDurationSec());
-		video.setOpenForCritique(videoDto.getOpenForCritique());
+		video.setIsOpenForCritique(videoDto.getOpenForCritique());
     	
         return videoService.uploadVideo(video);
     }

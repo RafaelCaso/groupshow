@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 import com.groupshow.models.Video;
 import com.groupshow.models.VideoType;
 import com.groupshow.services.UserService;
@@ -36,7 +36,7 @@ public class TestUploadVideo {
         user.setGradeLevel("qaegag");
         user.setMajor("asfg");
         user.setMinor("asgasg");
-        user.setUserType(UserType.STUDENT);
+        user.setRole(UserRole.STUDENT);
         
         try {
         	userService.addUser(user);
@@ -54,13 +54,13 @@ public class TestUploadVideo {
             
             
             assertNotNull(savedVideo.getArtworkID());
-            assertEquals(video.getArtworkTitle(), savedVideo.getArtworkTitle());
-            assertNotNull(savedVideo.getArtworkTitle());
+            assertEquals(video.getArtworkTitle(), savedVideo.getTitle());
+            assertNotNull(savedVideo.getTitle());
             assertEquals(video.getArtistStatement(), savedVideo.getArtistStatement());
-            assertEquals(video.getArtworkURL(), savedVideo.getArtworkURL());
-            assertNotNull(savedVideo.getArtworkURL());
-            assertEquals(video.getVideoType(), savedVideo.getVideoType());
-            assertNotNull(savedVideo.getVideoType());
+            assertEquals(video.getArtworkURL(), savedVideo.getUrl());
+            assertNotNull(savedVideo.getUrl());
+            assertEquals(video.getVideoType(), savedVideo.getType());
+            assertNotNull(savedVideo.getType());
             assertEquals(video.getDurationHour(), savedVideo.getDurationHour());
             assertNotNull(savedVideo.getDurationHour());
             assertEquals(video.getDurationSec(), savedVideo.getDurationSec());

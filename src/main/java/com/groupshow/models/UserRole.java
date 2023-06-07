@@ -1,5 +1,5 @@
 package com.groupshow.models;
 
-public enum UserType {
+public enum UserRole {
 	STUDENT, TEACHER, ADMIN;
 }
