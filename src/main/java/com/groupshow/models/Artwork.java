@@ -16,7 +16,7 @@ public abstract class Artwork {
     private Integer artworkID;
 	
     @Column(nullable = false)
-    private String artworkTitle;
+    private String title;
 
     private String artistStatement;
 
@@ -33,12 +33,11 @@ public abstract class Artwork {
     }
 
     @Column(nullable = false)
-    private String artworkURL;
+    private String url;
 
     private Double averageScore;
     
-    private Boolean openForCritique;
+    private Boolean isOpenForCritique;
 
-    
     //private List<Critique> critiques;
 }

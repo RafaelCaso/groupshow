@@ -1,7 +1,6 @@
 package com.groupshow.controllers;
 
 import com.groupshow.models.User;
-import com.groupshow.repositories.PhotographRepository;
 import com.groupshow.repositories.UserRepository;
 import com.groupshow.utilities.dto.PhotographDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +29,11 @@ public class PhotographController {
 		photograph.setIsPrint(photographDto.getIsPrint());
 		photograph.setWidthInches(photographDto.getWidthInches());
 		photograph.setHeightInches(photographDto.getHeightInches());
-		photograph.setArtworkTitle(photographDto.getArtworkTitle());
+		photograph.setTitle(photographDto.getArtworkTitle());
 		photograph.setArtistStatement(photographDto.getArtistStatement());
 		photograph.setArtist(artist);
-		photograph.setArtworkURL(photographDto.getArtworkURL());
-		photograph.setOpenForCritique(photographDto.getOpenForCritique());
+		photograph.setUrl(photographDto.getArtworkURL());
+		photograph.setIsOpenForCritique(photographDto.getOpenForCritique());
 
 		return photographService.uploadPhotograph(photograph);
 	}

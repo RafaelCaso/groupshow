@@ -25,15 +25,15 @@ public class PerformanceController {
 
         Performance performance = new Performance();
 
-        performance.setPerformanceType(performanceDto.getPerformanceType());
+        performance.setType(performanceDto.getPerformanceType());
         performance.setDurationHour(performanceDto.getDurationHour());
         performance.setDurationMin(performanceDto.getDurationMin());
         performance.setDurationSec(performanceDto.getDurationSec());
-        performance.setArtworkTitle(performanceDto.getArtworkTitle());
+        performance.setTitle(performanceDto.getArtworkTitle());
         performance.setArtistStatement(performanceDto.getArtistStatement());
         performance.setArtist(artist);
-        performance.setArtworkURL(performanceDto.getArtworkURL());
-        performance.setOpenForCritique(performanceDto.getOpenForCritique());
+        performance.setUrl(performanceDto.getArtworkURL());
+        performance.setIsOpenForCritique(performanceDto.getOpenForCritique());
 
         return performanceService.uploadPerformance(performance);
     }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 import com.groupshow.models.Writing;
 import com.groupshow.models.WritingType;
 import com.groupshow.services.UserService;
@@ -36,7 +36,7 @@ public class TestUploadWriting {
         user.setGradeLevel("qaegag");
         user.setMajor("asfg");
         user.setMinor("asgasg");
-        user.setUserType(UserType.STUDENT);
+        user.setRole(UserRole.STUDENT);
         
         
         try {
@@ -53,17 +53,17 @@ public class TestUploadWriting {
     		Writing savedWriting = writingController.uploadWriting(writing);
     		
     		assertNotNull(savedWriting.getArtworkID());
-    		assertNotNull(savedWriting.getArtworkTitle());
-    		assertNotNull(savedWriting.getArtworkURL());
+    		assertNotNull(savedWriting.getTitle());
+    		assertNotNull(savedWriting.getUrl());
     		assertNotNull(savedWriting.isFiction());
     		assertNotNull(savedWriting.getWordCount());
-    		assertNotNull(savedWriting.getWritingType());
-    		assertEquals(savedWriting.getArtworkTitle(), writing.getArtworkTitle());
+    		assertNotNull(savedWriting.getType());
+    		assertEquals(savedWriting.getTitle(), writing.getArtworkTitle());
     		assertEquals(savedWriting.getArtistStatement(), writing.getArtistStatement());
-    		assertEquals(savedWriting.getArtworkURL(), writing.getArtworkURL());
+    		assertEquals(savedWriting.getUrl(), writing.getArtworkURL());
     		assertEquals(savedWriting.isFiction(), writing.getFiction());
     		assertEquals(savedWriting.getWordCount(), writing.getWordCount());
-    		assertEquals(savedWriting.getWritingType(), writing.getWritingType());
+    		assertEquals(savedWriting.getType(), writing.getWritingType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

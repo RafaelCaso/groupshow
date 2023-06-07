@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.Song;
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.SongDto;
 
@@ -35,7 +35,7 @@ public class TestUploadSong {
         user.setGradeLevel("qaegag");
         user.setMajor("asfg");
         user.setMinor("asgasg");
-        user.setUserType(UserType.STUDENT);
+        user.setRole(UserRole.STUDENT);
         
         
         try {
@@ -52,11 +52,11 @@ public class TestUploadSong {
 
 
             assertNotNull(savedSong.getArtworkID());
-            assertEquals(song.getArtworkTitle(), savedSong.getArtworkTitle());
-            assertNotNull(savedSong.getArtworkTitle());
+            assertEquals(song.getArtworkTitle(), savedSong.getTitle());
+            assertNotNull(savedSong.getTitle());
             assertEquals(song.getArtistStatement(), savedSong.getArtistStatement());
-            assertEquals(song.getArtworkURL(), savedSong.getArtworkURL());
-            assertNotNull(savedSong.getArtworkURL());
+            assertEquals(song.getArtworkURL(), savedSong.getUrl());
+            assertNotNull(savedSong.getUrl());
             assertEquals(song.getDurationMin(), savedSong.getDurationMin());
             assertNotNull(savedSong.getDurationMin());
             assertEquals(song.getDurationSec(), savedSong.getDurationSec());

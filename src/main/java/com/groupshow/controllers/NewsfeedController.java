@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/newsfeed")
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 public class NewsfeedController {
 
     @Autowired

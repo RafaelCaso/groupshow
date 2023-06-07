@@ -14,7 +14,7 @@ public class Performance extends Artwork {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PerformanceType performanceType;
+    private PerformanceType type;
 
     @Column(nullable = false)
     private Integer durationHour;

@@ -32,11 +32,11 @@ public class SongController {
     	
     	song.setArtist(artist);
     	song.setArtistStatement(songDto.getArtistStatement());
-    	song.setArtworkURL(songDto.getArtworkURL());
-    	song.setArtworkTitle(songDto.getArtworkTitle());
+    	song.setUrl(songDto.getArtworkURL());
+    	song.setTitle(songDto.getArtworkTitle());
     	song.setDurationMin(songDto.getDurationMin());
     	song.setDurationSec(songDto.getDurationSec());
-    	song.setOpenForCritique(songDto.getOpenForCritique());
+    	song.setIsOpenForCritique(songDto.getOpenForCritique());
     	
         return songService.uploadSong(song);
     }

@@ -1,7 +1,7 @@
 package com.groupshow.services;
 
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 import com.groupshow.repositories.UserRepository;
 import com.groupshow.security.JwtService;
 import com.groupshow.utilities.Registrar;
@@ -33,7 +33,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .userType(UserType.ADMIN)
+                .role(UserRole.ADMIN)
                 .build();
 
         String regTokenID = TokenGenerator.createNewToken();

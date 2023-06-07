@@ -29,7 +29,7 @@ public class User implements UserDetails {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
-	private UserType userType;
+	private UserRole role;
 	
 	@Column(nullable=false)
 	private String email;
@@ -90,7 +90,7 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(userType.name()));
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override

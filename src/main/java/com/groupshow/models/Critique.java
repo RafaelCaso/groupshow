@@ -17,6 +17,9 @@ public class Critique {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer critiqueID;
+
+	@Column(nullable = false)
+	private Integer rating;
 	
 	private String content;
 

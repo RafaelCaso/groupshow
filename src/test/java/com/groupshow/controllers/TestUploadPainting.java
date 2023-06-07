@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.groupshow.models.Painting;
 import com.groupshow.models.PaintingType;
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.PaintingDto;
 
@@ -35,7 +35,7 @@ public class TestUploadPainting {
         user.setGradeLevel("qaegag");
         user.setMajor("asfg");
         user.setMinor("asgasg");
-        user.setUserType(UserType.STUDENT);
+        user.setRole(UserRole.STUDENT);
 
         try {
         	userService.addUser(user);
@@ -53,17 +53,17 @@ public class TestUploadPainting {
 
 
             assertNotNull(savedPainting.getArtworkID());
-            assertEquals(painting.getArtworkTitle(), savedPainting.getArtworkTitle());
-            assertNotNull(savedPainting.getArtworkTitle());
+            assertEquals(painting.getArtworkTitle(), savedPainting.getTitle());
+            assertNotNull(savedPainting.getTitle());
             assertEquals(painting.getArtistStatement(), savedPainting.getArtistStatement());
-            assertEquals(painting.getArtworkURL(), savedPainting.getArtworkURL());
-            assertNotNull(savedPainting.getArtworkURL());
-            assertEquals(painting.getPaintingType(), savedPainting.getPaintingType());
-            assertNotNull(savedPainting.getPaintingType());
-            assertEquals(painting.getPaintingWidth(), savedPainting.getPaintingWidth());
-            assertNotNull(savedPainting.getPaintingWidth());
-            assertEquals(painting.getPaintingHeight(), savedPainting.getPaintingHeight());
-            assertNotNull(savedPainting.getPaintingHeight());
+            assertEquals(painting.getArtworkURL(), savedPainting.getUrl());
+            assertNotNull(savedPainting.getUrl());
+            assertEquals(painting.getPaintingType(), savedPainting.getType());
+            assertNotNull(savedPainting.getType());
+            assertEquals(painting.getPaintingWidth(), savedPainting.getWidthInches());
+            assertNotNull(savedPainting.getWidthInches());
+            assertEquals(painting.getPaintingHeight(), savedPainting.getHeightInches());
+            assertNotNull(savedPainting.getHeightInches());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

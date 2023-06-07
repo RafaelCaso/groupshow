@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.User;
-import com.groupshow.models.UserType;
+import com.groupshow.models.UserRole;
 
 @SpringBootTest
 public class TestRegisterUser {
@@ -22,7 +22,7 @@ public class TestRegisterUser {
 		user.setFirstName("TestfName");
 		user.setLastName("TestlName");
 		user.setEmail("test@testemail.com");
-		user.setUserType(UserType.STUDENT);
+		user.setRole(UserRole.STUDENT);
 		user.setGradeLevel("TestLevel");
 		user.setMajor("TestMajor");
 		user.setMinor("TestMinor");
@@ -36,8 +36,8 @@ public class TestRegisterUser {
 			assertNotNull(savedUser.getLastName());
 			assertEquals(user.getEmail(), savedUser.getEmail());
 			assertNotNull(savedUser.getEmail());
-			assertEquals(user.getUserType(), savedUser.getUserType());
-			assertNotNull(savedUser.getUserType());
+			assertEquals(user.getRole(), savedUser.getRole());
+			assertNotNull(savedUser.getRole());
 			assertEquals(user.getGradeLevel(), savedUser.getGradeLevel());
 			assertEquals(user.getMajor(), savedUser.getMajor());
 			assertEquals(user.getMinor(), savedUser.getMinor());

@@ -31,14 +31,14 @@ public class TestUploadPhotograph {
 		Photograph savedPhotograph = photographController.uploadPhotograph(photograph);
 		
 		assertNotNull(savedPhotograph.getArtworkID());
-		assertNotNull(savedPhotograph.getArtworkTitle());
-		assertNotNull(savedPhotograph.getArtworkURL());
+		assertNotNull(savedPhotograph.getTitle());
+		assertNotNull(savedPhotograph.getUrl());
 		assertNotNull(savedPhotograph.getHeightInches());
 		assertNotNull(savedPhotograph.getWidthInches());
 		assertNotNull(savedPhotograph.getIsPrint());
-		assertEquals(photograph.getArtworkTitle(), savedPhotograph.getArtworkTitle());
+		assertEquals(photograph.getArtworkTitle(), savedPhotograph.getTitle());
 		assertEquals(photograph.getArtistStatement(), savedPhotograph.getArtistStatement());
-		assertEquals(photograph.getArtworkURL(), savedPhotograph.getArtworkURL());
+		assertEquals(photograph.getArtworkURL(), savedPhotograph.getUrl());
 		assertEquals(photograph.getIsPrint(), savedPhotograph.getIsPrint());
 		assertEquals(photograph.getHeightInches(), savedPhotograph.getHeightInches());
 		assertEquals(photograph.getWidthInches(), savedPhotograph.getWidthInches());
