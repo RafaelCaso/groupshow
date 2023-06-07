@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VideoDto {
 
-	private String artworkTitle;
-	private String artistStatement;
+	private String title;
+	private String statement;
 	private Integer artistID;
-	private String artworkURL;
-	private Boolean openForCritique;
+	private String url;
+	private Boolean isOpenForCritique;
 	private VideoType videoType;
 	private Integer durationHour;
 	private Integer durationMin;

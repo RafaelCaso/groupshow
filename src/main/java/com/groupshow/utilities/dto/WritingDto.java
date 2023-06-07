@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WritingDto {
 
-	private String artworkTitle;
-	private String artistStatement;
+	private String title;
+	private String statement;
 	private Integer artistID;
-	private String artworkURL;
-	private Boolean openForCritique;
+	private String url;
+	private Boolean isOpenForCritique;
 	private WritingType writingType;
-	private Boolean fiction;
+	private Boolean isFiction;
 	private Integer wordCount;
 
 	

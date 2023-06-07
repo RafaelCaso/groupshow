@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PerformanceDto {
-    private String artworkTitle;
-    private String artistStatement;
+    private String title;
+    private String statement;
     private Integer artistID;
-    private String artworkURL;
-    private Boolean openForCritique;
+    private String url;
+    private Boolean isOpenForCritique;
     private PerformanceType performanceType;
     private Integer durationHour;
     private Integer durationMin;

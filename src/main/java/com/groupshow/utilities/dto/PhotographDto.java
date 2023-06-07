@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PhotographDto {
-    private String artworkTitle;
-    private String artistStatement;
+    private String title;
+    private String statement;
     private Integer artistID;
-    private String artworkURL;
-    private Boolean openForCritique;
+    private String url;
+    private Boolean isOpenForCritique;
     private Boolean isPrint;
     private Double widthInches;
     private Double heightInches;

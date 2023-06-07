@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaintingDto {
     private PaintingType paintingType;
-    private Double paintingWidth;
-    private Double paintingHeight;
-    private String artworkTitle;
-    private String artistStatement;
+    private Double widthInches;
+    private Double heightInches;
+    private String title;
+    private String statement;
     private Integer artistID;
-    private String artworkURL;
-    private Boolean openForCritique;
+    private String url;
+    private Boolean isOpenForCritique;
 }
