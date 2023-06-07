@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SongDto {
 		
-	private String artworkTitle;
+	private String title;
 	
-	private String artistStatement;
+	private String statement;
 	
 	private Integer artistID;
 	
-	private String artworkURL;
+	private String url;
 
 	private Integer durationMin;
 	
 	private Integer durationSec;
 	
-	private Boolean openForCritique;
+	private Boolean isOpenForCritique;
 }
