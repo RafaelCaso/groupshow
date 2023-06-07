@@ -26,13 +26,13 @@ public class PaintingController {
         Painting painting = new Painting();
 
         painting.setType(paintingDto.getPaintingType());
-        painting.setWidthInches(paintingDto.getPaintingWidth());
-        painting.setHeightInches(paintingDto.getPaintingHeight());
-        painting.setTitle(paintingDto.getArtworkTitle());
-        painting.setArtistStatement(paintingDto.getArtistStatement());
+        painting.setWidthInches(paintingDto.getWidthInches());
+        painting.setHeightInches(paintingDto.getHeightInches());
+        painting.setTitle(paintingDto.getTitle());
+        painting.setArtistStatement(paintingDto.getStatement());
         painting.setArtist(artist);
-        painting.setUrl(paintingDto.getArtworkURL());
-        painting.setIsOpenForCritique(paintingDto.getOpenForCritique());
+        painting.setUrl(paintingDto.getUrl());
+        painting.setIsOpenForCritique(paintingDto.getIsOpenForCritique());
 
         return paintingService.uploadPainting(painting);
     }
