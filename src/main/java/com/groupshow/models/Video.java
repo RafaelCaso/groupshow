@@ -11,10 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="videos")
 public class Video extends Artwork {
-    
+
+    @Column(nullable = false)
+    private final String artworkType = "Video";
+
     @Enumerated(EnumType.STRING)
     @Column(nullable=false)
-    private VideoType type;
+    private VideoGenre genre;
 
     @Column(nullable = false)
     private Integer durationHour;

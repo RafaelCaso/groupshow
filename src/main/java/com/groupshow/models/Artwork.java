@@ -18,7 +18,7 @@ public abstract class Artwork {
     @Column(nullable = false)
     private String title;
 
-    private String artistStatement;
+    private String statement;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

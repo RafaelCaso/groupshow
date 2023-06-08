@@ -1,6 +1,6 @@
 package com.groupshow.utilities.dto;
 
-import com.groupshow.models.WritingType;
+import com.groupshow.models.WritingGenre;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class WritingDto {
 	private Integer artistID;
 	private String url;
 	private Boolean isOpenForCritique;
-	private WritingType writingType;
+	private WritingGenre genre;
 	private Boolean isFiction;
 	private Integer wordCount;
 

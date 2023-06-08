@@ -37,7 +37,7 @@ public class TestUploadPhotograph {
 		assertNotNull(savedPhotograph.getWidthInches());
 		assertNotNull(savedPhotograph.getIsPrint());
 		assertEquals(photograph.getArtworkTitle(), savedPhotograph.getTitle());
-		assertEquals(photograph.getArtistStatement(), savedPhotograph.getArtistStatement());
+		assertEquals(photograph.getArtistStatement(), savedPhotograph.getStatement());
 		assertEquals(photograph.getArtworkURL(), savedPhotograph.getUrl());
 		assertEquals(photograph.getIsPrint(), savedPhotograph.getIsPrint());
 		assertEquals(photograph.getHeightInches(), savedPhotograph.getHeightInches());

@@ -33,9 +33,9 @@ public class WritingController {
 		
 		writing.setArtist(artist);
 		writing.setTitle(writingDto.getTitle());
-		writing.setArtistStatement(writingDto.getStatement());
+		writing.setStatement(writingDto.getStatement());
 		writing.setUrl(writingDto.getUrl());
-		writing.setType(writingDto.getWritingType());
+		writing.setGenre(writingDto.getGenre());
 		writing.setFiction(writingDto.getIsFiction());
 		writing.setWordCount(writingDto.getWordCount());
 		writing.setIsOpenForCritique(writingDto.getIsOpenForCritique());

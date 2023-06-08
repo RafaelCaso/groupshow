@@ -1,6 +1,6 @@
 package com.groupshow.utilities.dto;
 
-import com.groupshow.models.PerformanceType;
+import com.groupshow.models.PerformanceGenre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public class PerformanceDto {
     private Integer artistID;
     private String url;
     private Boolean isOpenForCritique;
-    private PerformanceType performanceType;
+    private PerformanceGenre genre;
     private Integer durationHour;
     private Integer durationMin;
     private Integer durationSec;

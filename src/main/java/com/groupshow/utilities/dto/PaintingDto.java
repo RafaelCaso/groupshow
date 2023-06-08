@@ -1,7 +1,6 @@
 package com.groupshow.utilities.dto;
 
-import com.groupshow.models.PaintingType;
-import com.groupshow.models.User;
+import com.groupshow.models.PaintingGenre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaintingDto {
-    private PaintingType paintingType;
+    private PaintingGenre genre;
     private Double widthInches;
     private Double heightInches;
     private String title;

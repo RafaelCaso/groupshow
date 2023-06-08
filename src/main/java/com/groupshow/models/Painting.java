@@ -12,10 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="paintings")
 public class Painting extends Artwork {
-    
+
+    @Column(nullable = false)
+    private final String artworkType = "Painting";
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaintingType type;
+    private PaintingGenre genre;
 
     @Column(nullable = false)
     private Double widthInches;

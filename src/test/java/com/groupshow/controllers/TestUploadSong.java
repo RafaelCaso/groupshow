@@ -54,7 +54,7 @@ public class TestUploadSong {
             assertNotNull(savedSong.getArtworkID());
             assertEquals(song.getArtworkTitle(), savedSong.getTitle());
             assertNotNull(savedSong.getTitle());
-            assertEquals(song.getArtistStatement(), savedSong.getArtistStatement());
+            assertEquals(song.getArtistStatement(), savedSong.getStatement());
             assertEquals(song.getArtworkURL(), savedSong.getUrl());
             assertNotNull(savedSong.getUrl());
             assertEquals(song.getDurationMin(), savedSong.getDurationMin());

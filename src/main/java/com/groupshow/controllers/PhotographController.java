@@ -30,7 +30,7 @@ public class PhotographController {
 		photograph.setWidthInches(photographDto.getWidthInches());
 		photograph.setHeightInches(photographDto.getHeightInches());
 		photograph.setTitle(photographDto.getTitle());
-		photograph.setArtistStatement(photographDto.getStatement());
+		photograph.setStatement(photographDto.getStatement());
 		photograph.setArtist(artist);
 		photograph.setUrl(photographDto.getUrl());
 		photograph.setIsOpenForCritique(photographDto.getIsOpenForCritique());
