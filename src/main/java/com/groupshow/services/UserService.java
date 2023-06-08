@@ -1,17 +1,19 @@
 package com.groupshow.services;
 
-import com.groupshow.utilities.Registrar;
-import com.groupshow.utilities.TokenGenerator;
-import com.groupshow.utilities.dto.UserArtworkDto;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.groupshow.models.Artwork;
 import com.groupshow.models.User;
 import com.groupshow.repositories.UserRepository;
-
-import java.io.IOException;
+import com.groupshow.utilities.Registrar;
+import com.groupshow.utilities.TokenGenerator;
 
 @Service
 @Transactional
@@ -72,17 +74,18 @@ public class UserService {
 		return user;
 	}
 
-	public UserArtworkDto retrieveAllSubmittedArtwork(int userID) {
+	public List<Artwork> retrieveAllSubmittedArtwork(int userID) {
 		User user = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found."));
-		UserArtworkDto userArtworkDto = new UserArtworkDto();
 
-		userArtworkDto.setPaintings(user.getPaintings());
-		userArtworkDto.setPerformances(user.getPerformances());
-		userArtworkDto.setPhotographs(user.getPhotographs());
-		userArtworkDto.setSongs(user.getSongs());
-		userArtworkDto.setVideos(user.getVideos());
-		userArtworkDto.setWritings(user.getWritings());
-
-		return userArtworkDto;
+		List<Artwork> artworkList = new ArrayList<>();
+		
+		artworkList.addAll(user.getPaintings());
+		artworkList.addAll(user.getSongs());
+		artworkList.addAll(user.getPerformances());
+		artworkList.addAll(user.getVideos());
+		artworkList.addAll(user.getWritings());
+		artworkList.addAll(user.getPhotographs());
+		
+		return artworkList;
 	}
 }
