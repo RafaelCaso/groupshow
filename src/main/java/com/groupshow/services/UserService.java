@@ -14,7 +14,6 @@ import com.groupshow.models.User;
 import com.groupshow.repositories.UserRepository;
 import com.groupshow.utilities.Registrar;
 import com.groupshow.utilities.TokenGenerator;
-import com.groupshow.utilities.dto.UserArtworkDto;
 
 @Service
 @Transactional
@@ -77,14 +76,6 @@ public class UserService {
 
 	public List<Artwork> retrieveAllSubmittedArtwork(int userID) {
 		User user = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found."));
-//		UserArtworkDto userArtworkDto = new UserArtworkDto();
-
-//		userArtworkDto.setPaintings(user.getPaintings());
-//		userArtworkDto.setPerformances(user.getPerformances());
-//		userArtworkDto.setPhotographs(user.getPhotographs());
-//		userArtworkDto.setSongs(user.getSongs());
-//		userArtworkDto.setVideos(user.getVideos());
-//		userArtworkDto.setWritings(user.getWritings());
 
 		List<Artwork> artworkList = new ArrayList<>();
 		
