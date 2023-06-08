@@ -1,5 +1,7 @@
 package com.groupshow.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.groupshow.models.User;
+import com.groupshow.models.Artwork;
 import com.groupshow.services.AuthenticationService;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.AuthenticationRequestDto;
 import com.groupshow.utilities.dto.AuthenticationResponseDto;
 import com.groupshow.utilities.dto.PasswordResetDto;
 import com.groupshow.utilities.dto.RegisterRequestDto;
-import com.groupshow.utilities.dto.UserArtworkDto;
 
 
 @RestController
@@ -59,7 +60,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userID}/submitted-artwork")
-	public UserArtworkDto retrieveAllSubmittedArtwork(@PathVariable int userID) {
+	public List<Artwork> retrieveAllSubmittedArtwork(@PathVariable int userID) {
 		return userService.retrieveAllSubmittedArtwork(userID);
 	}
 }
