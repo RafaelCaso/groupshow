@@ -1,7 +1,7 @@
 package com.groupshow.controllers;
 
 import com.groupshow.models.Performance;
-import com.groupshow.models.PerformanceType;
+import com.groupshow.models.PerformanceGenre;
 
 import com.groupshow.utilities.dto.PerformanceDto;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class TestUploadPerformance {
         performance.setDurationHour(2);
         performance.setDurationMin(40);
         performance.setDurationSec(12);
-        performance.setPerformanceType(PerformanceType.CLASSICAL);
+        performance.setGenre(PerformanceGenre.CLASSICAL);
         performance.setArtistID(1);
 
         Performance savedPerformance = performanceController.uploadPerformance(performance);
@@ -36,7 +36,7 @@ public class TestUploadPerformance {
         assertNotNull(savedPerformance.getArtworkID());
         assertEquals(performance.getArtworkTitle(), savedPerformance.getTitle());
         assertNotNull(savedPerformance.getTitle());
-        assertEquals(performance.getArtistStatement(), savedPerformance.getArtistStatement());
+        assertEquals(performance.getArtistStatement(), savedPerformance.getStatement());
         assertEquals(performance.getArtworkURL(), savedPerformance.getUrl());
         assertNotNull(savedPerformance.getUrl());
         assertEquals(performance.getDurationHour(), savedPerformance.getDurationHour());
@@ -45,7 +45,7 @@ public class TestUploadPerformance {
         assertNotNull(savedPerformance.getDurationMin());
         assertEquals(performance.getDurationSec(), savedPerformance.getDurationSec());
         assertNotNull(savedPerformance.getDurationSec());
-        assertNotNull(performance.getPerformanceType());
-        assertEquals(performance.getPerformanceType(), savedPerformance.getType());
+        assertNotNull(performance.getGenre());
+        assertEquals(performance.getGenre(), savedPerformance.getGenre());
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.groupshow.models.User;
 import com.groupshow.models.UserRole;
 import com.groupshow.models.Writing;
-import com.groupshow.models.WritingType;
+import com.groupshow.models.WritingGenre;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.WritingDto;
 
@@ -47,7 +47,7 @@ public class TestUploadWriting {
     		writing.setArtworkURL("testURL");
     		writing.setFiction(false);
     		writing.setWordCount(1000);
-    		writing.setWritingType(WritingType.POEM);
+    		writing.setGenre(WritingGenre.POEM);
     		writing.setArtistID(1);
     		
     		Writing savedWriting = writingController.uploadWriting(writing);
@@ -57,13 +57,13 @@ public class TestUploadWriting {
     		assertNotNull(savedWriting.getUrl());
     		assertNotNull(savedWriting.isFiction());
     		assertNotNull(savedWriting.getWordCount());
-    		assertNotNull(savedWriting.getType());
+    		assertNotNull(savedWriting.getGenre());
     		assertEquals(savedWriting.getTitle(), writing.getArtworkTitle());
-    		assertEquals(savedWriting.getArtistStatement(), writing.getArtistStatement());
+    		assertEquals(savedWriting.getStatement(), writing.getArtistStatement());
     		assertEquals(savedWriting.getUrl(), writing.getArtworkURL());
     		assertEquals(savedWriting.isFiction(), writing.getFiction());
     		assertEquals(savedWriting.getWordCount(), writing.getWordCount());
-    		assertEquals(savedWriting.getType(), writing.getWritingType());
+    		assertEquals(savedWriting.getGenre(), writing.getGenre());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

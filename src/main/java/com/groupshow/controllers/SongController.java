@@ -31,7 +31,7 @@ public class SongController {
     	Song song = new Song();
     	
     	song.setArtist(artist);
-    	song.setArtistStatement(songDto.getStatement());
+    	song.setStatement(songDto.getStatement());
     	song.setUrl(songDto.getUrl());
     	song.setTitle(songDto.getTitle());
     	song.setDurationMin(songDto.getDurationMin());

@@ -16,7 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="photographs")
 public class Photograph extends Artwork {
-	
+
+	@Column(nullable = false)
+	private final String artworkType = "Photograph";
+
 	@Column(nullable=false)
 	private Boolean isPrint;
 	

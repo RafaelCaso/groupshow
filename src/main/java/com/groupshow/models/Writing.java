@@ -15,10 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="writings")
 public class Writing extends Artwork {
-	
+
+	@Column(nullable = false)
+	private final String artworkType = "Writing";
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private WritingType type;
+	private WritingGenre genre;
 	
 	@Column(nullable=false)
 	private boolean isFiction;

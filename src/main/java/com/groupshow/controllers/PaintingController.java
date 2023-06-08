@@ -25,11 +25,11 @@ public class PaintingController {
 
         Painting painting = new Painting();
 
-        painting.setType(paintingDto.getPaintingType());
+        painting.setGenre(paintingDto.getGenre());
         painting.setWidthInches(paintingDto.getWidthInches());
         painting.setHeightInches(paintingDto.getHeightInches());
         painting.setTitle(paintingDto.getTitle());
-        painting.setArtistStatement(paintingDto.getStatement());
+        painting.setStatement(paintingDto.getStatement());
         painting.setArtist(artist);
         painting.setUrl(paintingDto.getUrl());
         painting.setIsOpenForCritique(paintingDto.getIsOpenForCritique());

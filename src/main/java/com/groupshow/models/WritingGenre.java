@@ -1,5 +1,5 @@
 package com.groupshow.models;
 
-public enum WritingType {
+public enum WritingGenre {
 	NOVEL, SHORT_STORY, POEM
 }

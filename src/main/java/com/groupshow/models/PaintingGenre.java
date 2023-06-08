@@ -1,5 +1,5 @@
 package com.groupshow.models;
 
-public enum PaintingType {
+public enum PaintingGenre {
     OIL, WATERCOLOR, ACRYLIC;
 }

@@ -1,5 +1,5 @@
 package com.groupshow.models;
 
-public enum PerformanceType {
+public enum PerformanceGenre {
     BALLET, CLASSICAL, MODERN;
 }

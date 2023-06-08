@@ -23,7 +23,7 @@ import com.groupshow.utilities.dto.UserArtworkDto;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="*")
 public class UserController {
 	
 	@Autowired
@@ -50,7 +50,6 @@ public class UserController {
 		}
 		
 		return false;
-		
 	}
 
 	@PostMapping("/login")
