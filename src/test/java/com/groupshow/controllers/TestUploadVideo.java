@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.groupshow.models.User;
 import com.groupshow.models.UserRole;
 import com.groupshow.models.Video;
-import com.groupshow.models.VideoType;
+import com.groupshow.models.VideoGenre;
 import com.groupshow.services.UserService;
 import com.groupshow.utilities.dto.VideoDto;
 
@@ -44,7 +44,7 @@ public class TestUploadVideo {
             video.setArtworkTitle("TestTitle");
             video.setArtistStatement("TestStatement");
             video.setArtworkURL("TestURL");
-            video.setVideoType(VideoType.EXPERIMENTAL);
+            video.setGenre(VideoGenre.EXPERIMENTAL);
             video.setDurationHour(0);
             video.setDurationMin(29);
             video.setDurationSec(14);
@@ -56,11 +56,11 @@ public class TestUploadVideo {
             assertNotNull(savedVideo.getArtworkID());
             assertEquals(video.getArtworkTitle(), savedVideo.getTitle());
             assertNotNull(savedVideo.getTitle());
-            assertEquals(video.getArtistStatement(), savedVideo.getArtistStatement());
+            assertEquals(video.getArtistStatement(), savedVideo.getStatement());
             assertEquals(video.getArtworkURL(), savedVideo.getUrl());
             assertNotNull(savedVideo.getUrl());
-            assertEquals(video.getVideoType(), savedVideo.getType());
-            assertNotNull(savedVideo.getType());
+            assertEquals(video.getGenre(), savedVideo.getGenre());
+            assertNotNull(savedVideo.getGenre());
             assertEquals(video.getDurationHour(), savedVideo.getDurationHour());
             assertNotNull(savedVideo.getDurationHour());
             assertEquals(video.getDurationSec(), savedVideo.getDurationSec());

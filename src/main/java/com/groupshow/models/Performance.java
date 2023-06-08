@@ -11,10 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="performances")
 public class Performance extends Artwork {
-    
+
+    @Column(nullable = false)
+    private final String artworkType = "Performance";
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PerformanceType type;
+    private PerformanceGenre genre;
 
     @Column(nullable = false)
     private Integer durationHour;

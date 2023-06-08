@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class Song extends Artwork {
 
     @Column(nullable = false)
+    private final String artworkType = "Song";
+
+    @Column(nullable = false)
     private Integer durationMin;
 
     @Column(nullable = false)

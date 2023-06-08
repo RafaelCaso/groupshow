@@ -1,6 +1,6 @@
 package com.groupshow.utilities.dto;
 
-import com.groupshow.models.VideoType;
+import com.groupshow.models.VideoGenre;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class VideoDto {
 	private Integer artistID;
 	private String url;
 	private Boolean isOpenForCritique;
-	private VideoType videoType;
+	private VideoGenre genre;
 	private Integer durationHour;
 	private Integer durationMin;
 	private Integer durationSec;

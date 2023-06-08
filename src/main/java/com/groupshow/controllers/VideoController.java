@@ -32,10 +32,10 @@ public class VideoController {
     	Video video = new Video();
     	
     	video.setArtist(artist);
-    	video.setArtistStatement(videoDto.getStatement());
+    	video.setStatement(videoDto.getStatement());
     	video.setTitle(videoDto.getTitle());
     	video.setUrl(videoDto.getUrl());
-    	video.setType(videoDto.getVideoType());
+    	video.setGenre(videoDto.getGenre());
     	video.setDurationHour(videoDto.getDurationHour());
     	video.setDurationMin(videoDto.getDurationMin());
     	video.setDurationSec(videoDto.getDurationSec());

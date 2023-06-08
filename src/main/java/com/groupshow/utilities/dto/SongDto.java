@@ -10,16 +10,10 @@ import lombok.NoArgsConstructor;
 public class SongDto {
 		
 	private String title;
-	
 	private String statement;
-	
 	private Integer artistID;
-	
 	private String url;
-
 	private Integer durationMin;
-	
 	private Integer durationSec;
-	
 	private Boolean isOpenForCritique;
 }

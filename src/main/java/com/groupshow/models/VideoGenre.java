@@ -1,5 +1,5 @@
 package com.groupshow.models;
 
-public enum VideoType {
+public enum VideoGenre {
     SHORT, FEATURE, COMMERCIAL, MUSIC_VIDEO, EXPERIMENTAL;
 }

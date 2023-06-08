@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.groupshow.models.Painting;
-import com.groupshow.models.PaintingType;
+import com.groupshow.models.PaintingGenre;
 import com.groupshow.models.User;
 import com.groupshow.models.UserRole;
 import com.groupshow.services.UserService;
@@ -44,7 +44,7 @@ public class TestUploadPainting {
             painting.setArtworkTitle("TestTitle");
             painting.setArtistStatement("TestStatement");
             painting.setArtworkURL("TestURL");
-            painting.setPaintingType(PaintingType.ACRYLIC);
+            painting.setGenre(PaintingGenre.ACRYLIC);
             painting.setPaintingWidth(45.8);
             painting.setPaintingHeight(80.1);
 
@@ -55,11 +55,11 @@ public class TestUploadPainting {
             assertNotNull(savedPainting.getArtworkID());
             assertEquals(painting.getArtworkTitle(), savedPainting.getTitle());
             assertNotNull(savedPainting.getTitle());
-            assertEquals(painting.getArtistStatement(), savedPainting.getArtistStatement());
+            assertEquals(painting.getArtistStatement(), savedPainting.getStatement());
             assertEquals(painting.getArtworkURL(), savedPainting.getUrl());
             assertNotNull(savedPainting.getUrl());
-            assertEquals(painting.getPaintingType(), savedPainting.getType());
-            assertNotNull(savedPainting.getType());
+            assertEquals(painting.getGenre(), savedPainting.getGenre());
+            assertNotNull(savedPainting.getGenre());
             assertEquals(painting.getPaintingWidth(), savedPainting.getWidthInches());
             assertNotNull(savedPainting.getWidthInches());
             assertEquals(painting.getPaintingHeight(), savedPainting.getHeightInches());
