@@ -31,8 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // JWT gets passed through "Authorization" header
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
 
         // If JWT isn't present or if authHeader doesn't start with "Bearer",
         // pass the request&response to next filter in chain and return
@@ -42,8 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // "Bearer " is 7 chars starting at idx 0
-        jwt = authHeader.substring(7);
-        userEmail =  jwtService.extractUsername(jwt);
+        final String jwt = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(jwt);
 
         // if the userEmail exists but the user is not yet authenticated
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -51,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
