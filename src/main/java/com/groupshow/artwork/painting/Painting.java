@@ -16,7 +16,7 @@ public class Painting extends Artwork {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaintingType type;
+    private PaintingType paintingType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

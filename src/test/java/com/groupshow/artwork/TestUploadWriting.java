@@ -56,13 +56,13 @@ public class TestUploadWriting {
     		assertNotNull(savedWriting.getBucketUrl());
     		assertNotNull(savedWriting.isFiction());
     		assertNotNull(savedWriting.getWordCount());
-    		assertNotNull(savedWriting.getType());
+    		assertNotNull(savedWriting.getArtworkType());
     		assertEquals(savedWriting.getTitle(), writing.getArtworkTitle());
     		assertEquals(savedWriting.getStatement(), writing.getArtistStatement());
     		assertEquals(savedWriting.getBucketUrl(), writing.getArtworkURL());
     		assertEquals(savedWriting.isFiction(), writing.getFiction());
     		assertEquals(savedWriting.getWordCount(), writing.getWordCount());
-    		assertEquals(savedWriting.getType(), writing.getWritingType());
+    		assertEquals(savedWriting.getArtworkType(), writing.getWritingType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

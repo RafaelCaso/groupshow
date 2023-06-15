@@ -18,7 +18,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/activate")
-    public ResponseEntity<Boolean> activateNewUser(@RequestParam(name = "userID") Integer userID, @RequestParam(name = "regToken") String registrationToken) throws Exception {
+    public ResponseEntity<Boolean> activateNewUser(@PathVariable(name = "userID") Integer userID, @PathVariable(name = "regToken") String registrationToken) throws Exception {
         return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 

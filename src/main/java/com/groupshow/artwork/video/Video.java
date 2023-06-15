@@ -13,7 +13,7 @@ public class Video extends Artwork {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable=false)
-    private VideoType type;
+    private VideoType videoType;
 
     @Column(name = "duration_hours", nullable = false)
     private Integer durationHours;

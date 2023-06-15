@@ -58,8 +58,8 @@ public class TestUploadPainting {
             assertEquals(painting.getArtistStatement(), savedPainting.getStatement());
             assertEquals(painting.getArtworkURL(), savedPainting.getBucketUrl());
             assertNotNull(savedPainting.getBucketUrl());
-            assertEquals(painting.getPaintingType(), savedPainting.getType());
-            assertNotNull(savedPainting.getType());
+            assertEquals(painting.getPaintingType(), savedPainting.getArtworkType());
+            assertNotNull(savedPainting.getArtworkType());
             assertEquals(painting.getPaintingWidth(), savedPainting.getWidth());
             assertNotNull(savedPainting.getWidth());
             assertEquals(painting.getPaintingHeight(), savedPainting.getHeight());

@@ -20,7 +20,7 @@ public abstract class Artwork {
     private Integer artworkID;
 
     @Column(nullable = false)
-    private ArtworkType type;
+    private ArtworkType artworkType;
 
     @Column(nullable = false)
     private String title;

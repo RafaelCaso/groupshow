@@ -46,6 +46,6 @@ public class TestUploadPerformance {
         assertEquals(performance.getDurationSecs(), savedPerformance.getDurationSecs());
         assertNotNull(savedPerformance.getDurationSecs());
         assertNotNull(performance.getPerformanceType());
-        assertEquals(performance.getPerformanceType(), savedPerformance.getType());
+        assertEquals(performance.getPerformanceType(), savedPerformance.getArtworkType());
     }
 }

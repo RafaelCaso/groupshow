@@ -59,8 +59,8 @@ public class TestUploadVideo {
             assertEquals(video.getArtistStatement(), savedVideo.getStatement());
             assertEquals(video.getArtworkURL(), savedVideo.getBucketUrl());
             assertNotNull(savedVideo.getBucketUrl());
-            assertEquals(video.getVideoType(), savedVideo.getType());
-            assertNotNull(savedVideo.getType());
+            assertEquals(video.getVideoType(), savedVideo.getArtworkType());
+            assertNotNull(savedVideo.getArtworkType());
             assertEquals(video.getDurationHours(), savedVideo.getDurationHours());
             assertNotNull(savedVideo.getDurationHours());
             assertEquals(video.getDurationSecs(), savedVideo.getDurationSecs());

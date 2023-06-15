@@ -25,7 +25,7 @@ public class PaintingService {
         painting.setArtist(artist);
         painting.setBucketUrl(paintingDto.getBucketUrl());
         painting.setIsOpenForCritique(paintingDto.getIsOpenForCritique());
-        painting.setType(paintingDto.getPaintingType());
+        painting.setPaintingType(paintingDto.getPaintingType());
         painting.setUnits(paintingDto.getUnits());
         painting.setWidth(paintingDto.getWidth());
         painting.setHeight(paintingDto.getHeight());
