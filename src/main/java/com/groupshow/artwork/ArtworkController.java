@@ -1,5 +1,6 @@
 package com.groupshow.artwork;
 
+import com.groupshow.artwork.painting.PaintingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/artwork")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class ArtworkController {
 
     @Autowired
@@ -19,33 +20,38 @@ public class ArtworkController {
         return ResponseEntity.ok(artworkService.getTwentyMostRecentArtworks());
     }
 
-    @GetMapping("?artwork={artworkID}")
-    public ResponseEntity<Artwork> getArtworkByID(@PathVariable Integer artworkID) {
-        return ResponseEntity.ok(artworkService.getArtworkByID(artworkID));
+    @GetMapping("?artworkID={artworkID}")
+    public ResponseEntity<Artwork> getSingleArtworkByID(@PathVariable Integer artworkID) {
+        return ResponseEntity.ok(artworkService.getSingleArtworkByID(artworkID));
     }
 
-    @GetMapping("?user={userID}/all")
-    public ResponseEntity<List<Artwork>> getAllArtworkByUser(@PathVariable Integer userID) {
-        return ResponseEntity.ok(artworkService.getAllUserArtwork(userID));
+    @GetMapping("/all?userID={userID}")
+    public ResponseEntity<List<Artwork>> getAllArtworkByUserID(@PathVariable Integer userID) {
+        return ResponseEntity.ok(artworkService.getAllArtworkByUserID(userID));
     }
 
-    @GetMapping("?user={userID}/{artworkType}/all")
+    @GetMapping("/all?userID={userID}&artworkType={artworkType}")
     public ResponseEntity<List<? extends Artwork>> getAllArtworkByType(@PathVariable Integer userID, @PathVariable String artworkType) {
         switch (artworkType) {
-            case "paintings":
+            case "painting":
                 return ResponseEntity.ok(artworkService.getAllUserPaintings(userID));
-            case "performances":
+            case "performance":
                 return ResponseEntity.ok(artworkService.getAllUserPerformances(userID));
-            case "photographs":
+            case "photograph":
                 return ResponseEntity.ok(artworkService.getAllUserPhotographs(userID));
-            case "songs":
+            case "song":
                 return ResponseEntity.ok(artworkService.getAllUserSongs(userID));
-            case "videos":
+            case "video":
                 return ResponseEntity.ok(artworkService.getAllUserVideos(userID));
-            case "writings":
+            case "writing":
                 return ResponseEntity.ok(artworkService.getAllUserWritings(userID));
             default:
                 throw new RuntimeException("The given artwork type is not valid.");
         }
+    }
+
+    @GetMapping("?artworkID={artworkID}&critiqueStatus={critiqueStatus}")
+    public ResponseEntity<Boolean> setCritiqueStatus(@PathVariable Integer artworkID, @PathVariable String critiqueStatus) {
+        return ResponseEntity.ok(artworkService.setCritiqueStatus(artworkID, critiqueStatus));
     }
 }

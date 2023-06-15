@@ -21,9 +21,9 @@ public class Emailer {
 		String emailSubjectLine = "GroupShow Registration Link for " + user.getFirstName() + " " + user.getLastName();
 		var emailBody = new Content("text/plain", "Congratulations! " +
 				"You have been registered for Group Show.\n\n" +
+				"Your temporary password is " + user.getPassword() + "\n\n" +
 				"Please follow the link below to activate your account:\n\n" +
-				"http://localhost:8000/auth/activate?regToken=" + user.getRegistrationToken()
-				);
+				"http://localhost:8000/auth/activate?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
 
 		var mailObject = new Mail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
 

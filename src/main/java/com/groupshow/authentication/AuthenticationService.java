@@ -22,6 +22,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public Boolean registerNewUser(RegisterRequestDto regRequest) {
+        String defaultPassword = TokenGenerator.createNewToken();
         String registrationToken = TokenGenerator.createNewToken();
 
         var newUser = User.builder()
@@ -29,6 +30,7 @@ public class AuthenticationService {
                 .firstName(regRequest.getFirstName())
                 .lastName(regRequest.getLastName())
                 .email(regRequest.getEmail())
+                .password(defaultPassword)
                 .gradeLevel(regRequest.getGradeLevel())
                 .major(regRequest.getMajor())
                 .minor(regRequest.getMinor())
@@ -48,15 +50,14 @@ public class AuthenticationService {
 		}
     }
 
-    public Boolean activateNewUser(String registrationToken) throws Exception {
-        User registeredUser = userRepository.findByRegistrationToken(registrationToken).orElseThrow(() -> new Exception("A user with this registration token was not found."));
+    public Boolean activateNewUser(Integer userID, String registrationToken) throws Exception {
+        User registeredUser = userRepository.findById(userID).orElseThrow(() -> new Exception("User not found."));
 
-        if (registeredUser != null && !registeredUser.getIsAccountActivated()) {
+        if (registeredUser.getRegistrationToken().equals(registrationToken) && !registeredUser.getIsAccountActivated()) {
             registeredUser.setIsAccountActivated(true);
             userRepository.save(registeredUser);
             return true;
         }
-
         return false;
     }
 

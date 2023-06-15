@@ -6,6 +6,7 @@ import com.groupshow.artwork.photograph.Photograph;
 import com.groupshow.artwork.song.Song;
 import com.groupshow.artwork.video.Video;
 import com.groupshow.artwork.writing.Writing;
+import com.groupshow.security.JwtService;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -25,11 +26,14 @@ public class ArtworkService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtService jwtService;
+
     public List<Artwork> getTwentyMostRecentArtworks() {
         return artworkRepository.findTop20ByOrderBySubmissionDateDesc();
     }
 
-    public List<Artwork> getAllUserArtwork(Integer userID) {
+    public List<Artwork> getAllArtworkByUserID(Integer userID) {
         User thisUser = userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found."));
 
         List<Artwork> artworks = new ArrayList<>();
@@ -98,9 +102,22 @@ public class ArtworkService {
         return writings;
     }
 
-    public Artwork getArtworkByID(Integer artworkID) {
-        return artworkRepository.findByArtworkID(artworkID);
+    public Artwork getSingleArtworkByID(Integer artworkID) {
+        return artworkRepository.findById(artworkID).orElseThrow(() -> new RuntimeException("Artwork not found."));
     }
 
+    public Boolean setCritiqueStatus(Integer artworkID, String critiqueStatus) {
+        Artwork thisArtwork = artworkRepository.findById(artworkID).orElseThrow(() -> new RuntimeException("Artwork not found."));
 
+        if (critiqueStatus.equals("open") && thisArtwork.getIsOpenForCritique() == false) {
+            thisArtwork.setIsOpenForCritique(true);
+            artworkRepository.save(thisArtwork);
+            return true;
+        } else if (critiqueStatus.equals("closed") && thisArtwork.getIsOpenForCritique() == true) {
+            thisArtwork.setIsOpenForCritique(false);
+            artworkRepository.save(thisArtwork);
+            return true;
+        }
+        return false;
+    }
 }

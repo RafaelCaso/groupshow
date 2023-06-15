@@ -13,17 +13,17 @@ public class AuthenticationController {
     private AuthenticationService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
+    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) {
         return ResponseEntity.ok(authService.registerNewUser(regRequest));
     }
 
     @GetMapping("/activate")
-    public ResponseEntity<Boolean> activateNewUser(@RequestParam(name="regToken")String registrationToken) throws Exception {
-        return ResponseEntity.ok(authService.activateNewUser(registrationToken));
+    public ResponseEntity<Boolean> activateNewUser(@RequestParam(name = "userID") Integer userID, @RequestParam(name = "regToken") String registrationToken) throws Exception {
+        return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Boolean> resetPassword(ResetPasswordRequestDto resetPasswordRequest) throws Exception {
+    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequest) throws Exception {
         return ResponseEntity.ok(authService.resetPassword(resetPasswordRequest));
     }
 
@@ -33,5 +33,5 @@ public class AuthenticationController {
     }
 
     // logout route
-        // revoke jwt?
+    // revoke jwt?
 }

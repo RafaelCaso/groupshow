@@ -29,16 +29,4 @@ public class CritiqueController {
 	public ResponseEntity<Boolean> addCritique(@RequestBody CritiqueDto critiqueDto) {
 		return ResponseEntity.ok(critiqueService.addCritique(critiqueDto));
 	}
-
-
-	// Move this to new ArtworkService or something
-
-//	public void changeOpenForCritique(Critique critique) {
-//		if (critique.getArtwork().getOpenForCritique()) {
-//			critique.getArtwork().setOpenForCritique(false);
-//		} else {
-//			critique.getArtwork().setOpenForCritique(true);
-//		}
-//	}
-	
 }
