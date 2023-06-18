@@ -3,14 +3,18 @@ package com.groupshow.critique;
 import com.groupshow.artwork.Artwork;
 import com.groupshow.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="critiques")
 public class Critique {
 	

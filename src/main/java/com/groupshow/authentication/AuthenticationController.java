@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
@@ -17,8 +19,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.registerNewUser(regRequest));
     }
 
-    @GetMapping("/activate")
-    public ResponseEntity<Boolean> activateNewUser(@PathVariable(name = "userID") Integer userID, @PathVariable(name = "regToken") String registrationToken) throws Exception {
+    @GetMapping("/activate-account")
+    public ResponseEntity<Boolean> activateNewUser(@RequestParam(name = "userID") Integer userID, @RequestParam(name = "regToken") String registrationToken) throws Exception {
         return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 
@@ -32,6 +34,20 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.login(authRequest));
     }
 
-    // logout route
-    // revoke jwt?
+    @GetMapping("/refresh-access")
+    public ResponseEntity<String> refreshAccessToken(@RequestHeader("Authorization") String authHeader) {
+        return ResponseEntity.ok(authService.refreshAccessToken(authHeader));
+    }
+
+    @GetMapping("/logout")
+    // pass jwt here? where does jwt get extracted from header/where can I use it?
+    public ResponseEntity<Boolean> logout() {
+        return ResponseEntity.ok(authService.logout());
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) throws IOException {
+        return ResponseEntity.ok(authService.forgotPassword(userEmail));
+    }
+
 }

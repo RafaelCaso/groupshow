@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.groupshow.user.User;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
-import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -14,32 +13,52 @@ import com.sendgrid.helpers.mail.objects.Email;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Emailer {
-	
-	public static Response sendRegistrationEmail(User user) throws IOException {
+
+	private final static String urlBase = "http://localhost:8000";
+	private final static Dotenv dotenv = Dotenv.load();
+	private final static SendGrid sendGrid = new SendGrid(dotenv.get("SENDGRID_API_KEY"));
+
+	private static void sendSGEmail(Email senderEmail, String emailSubjectLine, Email recipientEmail, Content emailBody) throws IOException {
+		var mailObject = new Mail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
+		var activationRequest = new Request();
+
+		activationRequest.setMethod(Method.POST);
+		activationRequest.setEndpoint("mail/send");
+		activationRequest.setBody(mailObject.build());
+
+		sendGrid.api(activationRequest);
+	}
+
+	public static void sendRegistrationEmail(User user) throws IOException {
 		var senderEmail = new Email("groupshow18@gmail.com");
 		var recipientEmail = new Email(user.getEmail());
 		String emailSubjectLine = "GroupShow Registration Link for " + user.getFirstName() + " " + user.getLastName();
 		var emailBody = new Content("text/plain", "Congratulations! " +
-				"You have been registered for Group Show.\n\n" +
+				"Your school has registered you for Group Show!\n\n" +
 				"Your temporary password is " + user.getPassword() + "\n\n" +
 				"Please follow the link below to activate your account:\n\n" +
-				"http://localhost:8000/auth/activate?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
-
-		var mailObject = new Mail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
-
-		var dotenv = Dotenv.load();
-		var sendGrid = new SendGrid(dotenv.get("SENDGRID_API_KEY"));
-
-		var activationRequest = new Request();
+				urlBase + "/auth/activate-account?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
 
 		try {
-			activationRequest.setMethod(Method.POST);
-			activationRequest.setEndpoint("mail/send");
-			activationRequest.setBody(mailObject.build());
-
-			return sendGrid.api(activationRequest);
+			sendSGEmail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
 		} catch (IOException e) {
 			throw e;
 		}
+	}
+
+	public static void sendPasswordResetEmail(String userEmail) throws IOException {
+		var senderEmail = new Email("groupshow18@gmail.com");
+		var recipientEmail = new Email(userEmail);
+		String emailSubjectLine = "Reset Your Group Show Password";
+		var emailBody = new Content("text/plain",
+				"Please follow the link below to reset your Group Show password:\n\n"
+//				We need to the send the user to the reset Password page, which will be a different
+//				endpoint from the currently existing auth/reset-password route. That route is used once the user
+//				is on the resetPassword frontend page and sends the password reset data to the backend.
+
+//				urlBase + "/auth/reset-password"
+				);
+
+		sendSGEmail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
 	}
 }

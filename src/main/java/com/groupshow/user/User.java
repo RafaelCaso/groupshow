@@ -8,8 +8,10 @@ import com.groupshow.artwork.song.Song;
 import com.groupshow.artwork.video.Video;
 import com.groupshow.artwork.writing.Writing;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,8 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -39,7 +43,7 @@ public class User implements UserDetails {
     @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -55,18 +59,18 @@ public class User implements UserDetails {
     @Column(length = 100)
     private String minor;
 
-    @Column(name = "registration_token", length = 36, nullable = false)
+    @Column(name = "registration_token", unique = true, length = 36, nullable = false)
     private String registrationToken;
 
 	@Column(name = "is_account_activated", nullable = false)
-	private Boolean isAccountActivated = false;
+	private Boolean isAccountActivated;
 
-    @Column(name = "creation_date_time")
-    private LocalDateTime creationDateTime;
+    @Column(name = "creation_datetime")
+    private LocalDateTime creationDatetime;
 
     @PrePersist
     public void prePersistCreationDate() {
-        creationDateTime = LocalDateTime.now();
+        creationDatetime = LocalDateTime.now();
     }
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)

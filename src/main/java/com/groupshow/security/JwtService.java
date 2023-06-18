@@ -1,5 +1,6 @@
 package com.groupshow.security;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +17,11 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "SECRETKEYadsd987f9j3h2j9832jc8j89jcjc9dsajoufjc8e9wj8rf9ejw8je80wjc0cj098jc0q0202393032cmklcsdjfklsnakjnvadonvon";
+    Dotenv dotenv = Dotenv.load();
+
+    private final String SECRET_KEY = dotenv.get("JWT_SECRET_KEY");
+    private final Long JWT_ACCESS_EXP_TIME_MS = 1000 * 60 * 60L;
+    private final Long JWT_REFRESH_EXP_TIME_MS = 1000 * 60 * 60 * 24L;
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -40,32 +45,46 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, JwtTokenType jwtTokenType) {
+        return generateToken(new HashMap<>(), userDetails, jwtTokenType);
     }
 
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            UserDetails userDetails,
+            JwtTokenType jwtTokenType
     ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+        if (jwtTokenType.equals(JwtTokenType.ACCESS)) {
+            return Jwts
+                    .builder()
+                    .setClaims(extraClaims)
+                    .setSubject(userDetails.getUsername())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_EXP_TIME_MS))
+                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                    .compact();
+
+        } else if (jwtTokenType.equals(JwtTokenType.REFRESH)) {
+            return Jwts
+                    .builder()
+                    .setClaims(extraClaims)
+                    .setSubject(userDetails.getUsername())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_EXP_TIME_MS))
+                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                    .compact();
+        }
+        return null;
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        // What we are calling "username" is actually the user email
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
+        // "username" is actually the user email
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
 
     }
 
-    private boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

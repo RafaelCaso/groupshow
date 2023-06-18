@@ -8,5 +8,6 @@ import lombok.Data;
 @Builder
 public class AuthenticationResponseDto {
     private User user;
-    private String jwtToken;
+    private String jwtAccessToken;
+    private String jwtRefreshToken;
 }
