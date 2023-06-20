@@ -1,7 +1,12 @@
 package com.groupshow.authentication;
 
+import com.groupshow.exceptions.UserNotFoundException;
+import com.groupshow.security.LogoutService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -14,13 +19,19 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authService;
 
+    @Autowired
+    private LogoutService logoutService;
+
     @PostMapping("/register")
-    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) {
+    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
         return ResponseEntity.ok(authService.registerNewUser(regRequest));
     }
 
     @GetMapping("/activate-account")
-    public ResponseEntity<Boolean> activateNewUser(@RequestParam(name = "userID") Integer userID, @RequestParam(name = "regToken") String registrationToken) throws Exception {
+    public ResponseEntity<Boolean> activateNewUser(
+            @RequestParam(name = "userID") Integer userID,
+            @RequestParam(name = "regToken") String registrationToken)
+            throws Exception {
         return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 
@@ -35,19 +46,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/refresh-access")
-    public ResponseEntity<String> refreshAccessToken(@RequestHeader("Authorization") String authHeader) {
-        return ResponseEntity.ok(authService.refreshAccessToken(authHeader));
-    }
-
-    @GetMapping("/logout")
-    // pass jwt here? where does jwt get extracted from header/where can I use it?
-    public ResponseEntity<Boolean> logout() {
-        return ResponseEntity.ok(authService.logout());
+    public ResponseEntity<String> refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
+        return ResponseEntity.ok(authService.refreshAccessToken(refreshToken));
     }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) throws IOException {
         return ResponseEntity.ok(authService.forgotPassword(userEmail));
     }
-
 }

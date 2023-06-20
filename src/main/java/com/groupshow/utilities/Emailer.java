@@ -14,20 +14,10 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Emailer {
 
-	private final static String urlBase = "http://localhost:8000";
+	private final static String backendUrlBase = "http://localhost:8000";
+	private final static String frontendUrlBase = "http://localhost:3000";
 	private final static Dotenv dotenv = Dotenv.load();
 	private final static SendGrid sendGrid = new SendGrid(dotenv.get("SENDGRID_API_KEY"));
-
-	private static void sendSGEmail(Email senderEmail, String emailSubjectLine, Email recipientEmail, Content emailBody) throws IOException {
-		var mailObject = new Mail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
-		var activationRequest = new Request();
-
-		activationRequest.setMethod(Method.POST);
-		activationRequest.setEndpoint("mail/send");
-		activationRequest.setBody(mailObject.build());
-
-		sendGrid.api(activationRequest);
-	}
 
 	public static void sendRegistrationEmail(User user) throws IOException {
 		var senderEmail = new Email("groupshow18@gmail.com");
@@ -37,7 +27,12 @@ public class Emailer {
 				"Your school has registered you for Group Show!\n\n" +
 				"Your temporary password is " + user.getPassword() + "\n\n" +
 				"Please follow the link below to activate your account:\n\n" +
-				urlBase + "/auth/activate-account?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
+				backendUrlBase + "/auth/activate-account?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
+
+		// the above url actually needs to send the user to the frontend
+		// when that frontend component loads, React should trigger the backend route
+		// to confirm authentication and then redirect the user to the frontend
+		// resetPassword page
 
 		try {
 			sendSGEmail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
@@ -60,5 +55,16 @@ public class Emailer {
 				);
 
 		sendSGEmail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
+	}
+
+	private static void sendSGEmail(Email senderEmail, String emailSubjectLine, Email recipientEmail, Content emailBody) throws IOException {
+		var mailObject = new Mail(senderEmail, emailSubjectLine, recipientEmail, emailBody);
+		var activationRequest = new Request();
+
+		activationRequest.setMethod(Method.POST);
+		activationRequest.setEndpoint("mail/send");
+		activationRequest.setBody(mailObject.build());
+
+		sendGrid.api(activationRequest);
 	}
 }

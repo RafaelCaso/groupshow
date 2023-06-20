@@ -7,6 +7,7 @@ import com.groupshow.artwork.photograph.Photograph;
 import com.groupshow.artwork.song.Song;
 import com.groupshow.artwork.video.Video;
 import com.groupshow.artwork.writing.Writing;
+import com.groupshow.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -72,6 +73,10 @@ public class User implements UserDetails {
     public void prePersistCreationDate() {
         creationDatetime = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Token> tokens;
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
     @JsonIgnore

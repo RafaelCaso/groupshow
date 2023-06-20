@@ -1,30 +1,31 @@
 package com.groupshow.authentication;
 
-import com.groupshow.security.JwtTokenType;
+import com.groupshow.exceptions.InvalidCredentialsException;
+import com.groupshow.exceptions.UserIsLoggedInException;
+import com.groupshow.exceptions.UserNotFoundException;
+import com.groupshow.token.Token;
+import com.groupshow.token.TokenRepository;
+import com.groupshow.token.TokenType;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import com.groupshow.security.JwtService;
 import com.groupshow.utilities.Emailer;
 import com.groupshow.utilities.TokenGenerator;
-import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
 
-    public Boolean registerNewUser(RegisterRequestDto regRequest) {
+    public Boolean registerNewUser(RegisterRequestDto regRequest) throws UserNotFoundException {
         String defaultPassword = TokenGenerator.createNewToken();
         String registrationToken = TokenGenerator.createNewToken();
 
@@ -43,7 +44,8 @@ public class AuthenticationService {
 
         userRepository.save(newUser);
 
-        User savedUser = userRepository.findById(newUser.getUserID()).get();
+        var savedUser = userRepository.findById(newUser.getUserID())
+                .orElseThrow(() -> new UserNotFoundException("ID"));
 
         try {
             Emailer.sendRegistrationEmail(savedUser);
@@ -54,86 +56,126 @@ public class AuthenticationService {
         }
     }
 
-    public Boolean activateNewUser(Integer userID, String registrationToken) throws Exception {
-        User registeredUser = userRepository.findById(userID).orElseThrow(() -> new Exception("User not found."));
+    public Boolean activateNewUser(Integer userID, String registrationToken) throws UserNotFoundException {
+        var user = userRepository.findById(userID)
+                .orElseThrow(() -> new UserNotFoundException("ID"));
 
-        if (registeredUser.getRegistrationToken().equals(registrationToken) && !registeredUser.getIsAccountActivated()) {
-            registeredUser.setIsAccountActivated(true);
-            userRepository.save(registeredUser);
+        if (user.getRegistrationToken().equals(registrationToken) && !user.getIsAccountActivated()) {
+            user.setIsAccountActivated(true);
+            userRepository.save(user);
             return true;
         }
         return false;
     }
 
-    public Boolean resetPassword(ResetPasswordRequestDto resetPasswordRequest) throws Exception {
+    public Boolean resetPassword(ResetPasswordRequestDto resetPasswordRequest) throws UserNotFoundException, InvalidCredentialsException {
         // Checks that new password is written correctly
         if (resetPasswordRequest.getNewPassword().equals(resetPasswordRequest.getConfirmNewPassword())) {
-            User activatedUser = userRepository.findByEmail(resetPasswordRequest.getEmail()).orElseThrow(() -> new Exception("A user with this email was not found."));
+            var user = userRepository.findByEmail(resetPasswordRequest.getEmail())
+                    .orElseThrow(() -> new UserNotFoundException("email"));
 
-            // Checks that user knows their original password - authorization check to reset it
-            if (activatedUser.getPassword().equals(resetPasswordRequest.getCurrentPassword())) {
-                activatedUser.setPassword(resetPasswordRequest.getNewPassword());
-                userRepository.save(activatedUser);
+            // Checks that user knows their original password in order to reset it
+            if (user.getIsAccountActivated() && user.getPassword().equals(resetPasswordRequest.getCurrentPassword())) {
+                user.setPassword(resetPasswordRequest.getNewPassword());
+                userRepository.save(user);
                 return true;
+            } else {
+                throw new InvalidCredentialsException();
             }
         }
         return false;
     }
 
-    public AuthenticationResponseDto login(AuthenticationRequestDto authRequest) throws Exception {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-        User authenticatedUser = userRepository.findByEmail(authRequest.getEmail()).orElseThrow(() -> new Exception("A user with this email was not found."));
+    public AuthenticationResponseDto login(AuthenticationRequestDto authRequest) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
+        var user = userRepository.findByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("email"));
 
-        if (!authenticatedUser.getPassword().equals(authRequest.getPassword())) {
-            throw new RuntimeException("Invalid credentials.");
+        if (!user.getTokens().isEmpty()) {
+            throw new UserIsLoggedInException();
         }
 
-        String jwtAccessToken = jwtService.generateToken(authenticatedUser, JwtTokenType.ACCESS);
-        String jwtRefreshToken = jwtService.generateToken(authenticatedUser, JwtTokenType.REFRESH);
+        if (!user.getPassword().equals(authRequest.getPassword())) {
+            throw new InvalidCredentialsException();
+        }
+
+        revokeAllUserTokens(user);
+
+        String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
+        saveToken(accessJwt, TokenType.ACCESS, user);
+
+        String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
+        saveToken(refreshJwt, TokenType.REFRESH, user);
 
         return AuthenticationResponseDto.builder()
-                .user(authenticatedUser)
-                .jwtAccessToken(jwtAccessToken)
-                .jwtRefreshToken(jwtRefreshToken)
+                .user(user)
+                .accessJwt(accessJwt)
+                .refreshJwt(refreshJwt)
                 .build();
     }
 
-    public String refreshAccessToken(String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String[] tokens = authHeader.substring(7).split(" ");
-            String refreshToken = tokens[1];
+    public String refreshAccessToken(String refreshJwt) throws UserNotFoundException {
+        // Use the refresh jwt to find the saved refresh token in db
+        var userRefreshToken = tokenRepository.findByJwt(refreshJwt)
+                .orElseThrow(() -> new UserNotFoundException("refresh token"));
 
-            // Get userDetails from refreshToken
-            try {
-                var authenticationToken = new UsernamePasswordAuthenticationToken(null, refreshToken);
-                Authentication authentication = authenticationManager.authenticate(authenticationToken);
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        // Use the saved refresh token to find its user
+        var user = userRefreshToken.getUser();
 
-                if (jwtService.isTokenValid(refreshToken, userDetails)) {
-                    String newAccessToken = jwtService.generateToken(userDetails, JwtTokenType.ACCESS);
-                    return newAccessToken;
-                }
-            } catch (AuthenticationException e) {
-                return null;
-            }
+        if (jwtService.isTokenValid(refreshJwt, user)) {
+            // Find and revoke the user's existing access token
+            user.getTokens()
+                    .stream()
+                    .filter(token -> token.getTokenType().equals(TokenType.ACCESS))
+                    .forEach(token -> {
+                        token.setIsExpired(true);
+                        token.setIsRevoked(true);
+                    });
+
+            // Create a new access jwt
+            String newAccessJwt = jwtService.generateToken(user, TokenType.ACCESS);
+
+            // Create a new access token and save it in db
+            saveToken(newAccessJwt, TokenType.ACCESS, user);
+            return newAccessJwt;
         }
         return null;
     }
 
-    public Boolean logout() {
-        // revoke jwt and any other cleanup?
-        return true;
+    private void revokeAllUserTokens(User user) {
+        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserID());
 
-        // else return false/throw error message
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+
+        validUserTokens.forEach(token -> {
+            token.setIsExpired(true);
+            token.setIsRevoked(true);
+        });
+
+        tokenRepository.saveAll(validUserTokens);
     }
 
-    public Boolean forgotPassword(String userEmail) throws IOException {
+    public Boolean forgotPassword(String userEmail) {
         try {
             Emailer.sendPasswordResetEmail(userEmail);
             return true;
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    private void saveToken(String token, TokenType tokenType, User user) {
+        var newToken = Token.builder()
+                .token(token)
+                .tokenType(tokenType)
+                .isExpired(false)
+                .isRevoked(false)
+                .user(user)
+                .build();
+
+        tokenRepository.save(newToken);
     }
 }
