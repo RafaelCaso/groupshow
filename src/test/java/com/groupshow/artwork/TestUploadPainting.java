@@ -44,7 +44,7 @@ public class TestUploadPainting {
             painting.setArtworkTitle("TestTitle");
             painting.setArtistStatement("TestStatement");
             painting.setArtworkURL("TestURL");
-            painting.setPaintingType(PaintingType.ACRYLIC);
+            painting.setType(PaintingType.ACRYLIC);
             painting.setPaintingWidth(45.8);
             painting.setPaintingHeight(80.1);
 
@@ -58,7 +58,7 @@ public class TestUploadPainting {
             assertEquals(painting.getArtistStatement(), savedPainting.getStatement());
             assertEquals(painting.getArtworkURL(), savedPainting.getBucketUrl());
             assertNotNull(savedPainting.getBucketUrl());
-            assertEquals(painting.getPaintingType(), savedPainting.getArtworkType());
+            assertEquals(painting.getType(), savedPainting.getArtworkType());
             assertNotNull(savedPainting.getArtworkType());
             assertEquals(painting.getPaintingWidth(), savedPainting.getWidth());
             assertNotNull(savedPainting.getWidth());

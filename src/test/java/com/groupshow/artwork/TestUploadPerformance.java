@@ -27,7 +27,7 @@ public class TestUploadPerformance {
         performance.setDurationHours(2);
         performance.setDurationMins(40);
         performance.setDurationSecs(12);
-        performance.setPerformanceType(PerformanceType.CLASSICAL);
+        performance.setType(PerformanceType.CLASSICAL);
         performance.setArtistID(1);
 
         Performance savedPerformance = performanceController.uploadPerformance(performance);
@@ -45,7 +45,7 @@ public class TestUploadPerformance {
         assertNotNull(savedPerformance.getDurationMins());
         assertEquals(performance.getDurationSecs(), savedPerformance.getDurationSecs());
         assertNotNull(savedPerformance.getDurationSecs());
-        assertNotNull(performance.getPerformanceType());
-        assertEquals(performance.getPerformanceType(), savedPerformance.getArtworkType());
+        assertNotNull(performance.getType());
+        assertEquals(performance.getType(), savedPerformance.getArtworkType());
     }
 }

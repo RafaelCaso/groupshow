@@ -2,11 +2,11 @@ package com.groupshow.authentication;
 
 import com.groupshow.exceptions.UserNotFoundException;
 import com.groupshow.security.LogoutService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.groupshow.user.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -41,8 +41,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto authRequest) throws Exception {
-        return ResponseEntity.ok(authService.login(authRequest));
+    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto authRequest, HttpServletResponse response) throws Exception {
+        var authResponseDto = authService.login(authRequest);
+
+        var headers = new HttpHeaders();
+        headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
+        headers.add("Authorization", "Bearer " + authResponseDto.getAccessJwt());
+        headers.add("X-Refresh-Token", authResponseDto.getRefreshJwt().toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(authResponseDto.getUser());
     }
 
     @GetMapping("/refresh-access")

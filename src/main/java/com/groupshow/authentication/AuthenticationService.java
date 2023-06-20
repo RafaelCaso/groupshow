@@ -77,6 +77,9 @@ public class AuthenticationService {
             // Checks that user knows their original password in order to reset it
             if (user.getIsAccountActivated() && user.getPassword().equals(resetPasswordRequest.getCurrentPassword())) {
                 user.setPassword(resetPasswordRequest.getNewPassword());
+
+               // has the password before saving it in db
+
                 userRepository.save(user);
                 return true;
             } else {
@@ -169,7 +172,7 @@ public class AuthenticationService {
 
     private void saveToken(String token, TokenType tokenType, User user) {
         var newToken = Token.builder()
-                .token(token)
+                .jwt(token)
                 .tokenType(tokenType)
                 .isExpired(false)
                 .isRevoked(false)

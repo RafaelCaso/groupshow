@@ -20,9 +20,6 @@ public abstract class Artwork {
     private Integer artworkID;
 
     @Column(nullable = false)
-    private ArtworkType artworkType;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(name = "artist_statement")

@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class SongDto {
-	private ArtworkType artworkType;
 	private String title;
 	private String artistStatement;
 	private Integer artistID;

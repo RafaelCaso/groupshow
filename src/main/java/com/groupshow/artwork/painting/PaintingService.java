@@ -3,18 +3,16 @@ package com.groupshow.artwork.painting;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PaintingService {
 
-    @Autowired
-    private PaintingRepository paintingRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final PaintingRepository paintingRepository;
+    private final UserRepository userRepository;
 
     public Boolean uploadPainting(PaintingDto paintingDto) {
         User artist = userRepository.findById(paintingDto.getArtistID()).get();
@@ -25,7 +23,7 @@ public class PaintingService {
         painting.setArtist(artist);
         painting.setBucketUrl(paintingDto.getBucketUrl());
         painting.setIsOpenForCritique(paintingDto.getIsOpenForCritique());
-        painting.setPaintingType(paintingDto.getPaintingType());
+        painting.setType(paintingDto.getType());
         painting.setUnits(paintingDto.getUnits());
         painting.setWidth(paintingDto.getWidth());
         painting.setHeight(paintingDto.getHeight());

@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // if the userEmail exists but Spring Security has not authenticated the user yet
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            var userDetails = userDetailsService.loadUserByUsername(userEmail);
 
             var isTokenValid = tokenRepository.findByJwt(jwt)
                     .map(token -> !token.getIsExpired() && !token.getIsRevoked())

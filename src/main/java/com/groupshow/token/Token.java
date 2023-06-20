@@ -5,10 +5,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name = "tokens")
 public class Token {
@@ -18,7 +20,7 @@ public class Token {
     @Column(name = "token_id")
     private Integer tokenID;
 
-    private String token;
+    private String jwt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -30,7 +32,7 @@ public class Token {
     @Column(name = "is_revoked", nullable = false)
     private Boolean isRevoked;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 }

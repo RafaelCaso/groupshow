@@ -10,6 +10,7 @@ import com.groupshow.security.JwtService;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,10 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ArtworkService {
-
-    @Autowired
-    private ArtworkRepository artworkRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtService jwtService;
+    private final ArtworkRepository artworkRepository;
+    private final UserRepository userRepository;
 
     public List<Artwork> getTwentyMostRecentArtworks() {
         return artworkRepository.findTop20ByOrderBySubmissionDateDesc();

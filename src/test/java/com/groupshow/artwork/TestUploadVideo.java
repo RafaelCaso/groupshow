@@ -44,7 +44,7 @@ public class TestUploadVideo {
             video.setArtworkTitle("TestTitle");
             video.setArtistStatement("TestStatement");
             video.setArtworkURL("TestURL");
-            video.setVideoType(VideoType.EXPERIMENTAL);
+            video.setType(VideoType.EXPERIMENTAL);
             video.setDurationHours(0);
             video.setDurationMins(29);
             video.setDurationSecs(14);
@@ -59,7 +59,7 @@ public class TestUploadVideo {
             assertEquals(video.getArtistStatement(), savedVideo.getStatement());
             assertEquals(video.getArtworkURL(), savedVideo.getBucketUrl());
             assertNotNull(savedVideo.getBucketUrl());
-            assertEquals(video.getVideoType(), savedVideo.getArtworkType());
+            assertEquals(video.getType(), savedVideo.getArtworkType());
             assertNotNull(savedVideo.getArtworkType());
             assertEquals(video.getDurationHours(), savedVideo.getDurationHours());
             assertNotNull(savedVideo.getDurationHours());

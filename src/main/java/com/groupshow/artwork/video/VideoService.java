@@ -25,7 +25,7 @@ public class VideoService {
         video.setArtist(artist);
         video.setBucketUrl(videoDto.getBucketUrl());
         video.setIsOpenForCritique(videoDto.getIsOpenForCritique());
-        video.setVideoType(videoDto.getVideoType());
+        video.setVideoType(videoDto.getType());
         video.setDurationHours(videoDto.getDurationHours());
         video.setDurationMins(videoDto.getDurationMins());
         video.setDurationSecs(videoDto.getDurationSecs());
