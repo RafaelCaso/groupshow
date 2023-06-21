@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +25,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public Boolean registerNewUser(RegisterRequestDto regRequest) throws UserNotFoundException {
         String defaultPassword = TokenGenerator.createNewToken();
@@ -73,10 +75,10 @@ public class AuthenticationService {
             var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new UserNotFoundException("email"));
 
-            if (user.getIsAccountActivated() && user.getPassword().equals(request.getCurrentPassword())) {
-//                String hashedPassword = applicationConfig.passwordEncoder().encode(request.getNewPassword());
+            if (user.isEnabled() && user.getPassword().equals(request.getCurrentPassword())) {
+                String hashedPassword = passwordEncoder.encode(request.getNewPassword());
 
-                user.setPassword(request.getCurrentPassword());
+                user.setPassword(hashedPassword);
 
                 userRepository.save(user);
                 return true;
@@ -87,33 +89,31 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthenticationResponseDto authenticateUser(AuthenticationRequestDto authRequest) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
-        var user = userRepository.findByEmail(authRequest.getEmail())
+    public AuthenticationResponseDto authenticateUser(AuthenticationRequestDto request) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("email"));
 
-        if (!user.getTokens().isEmpty()) {
+        if (user.isAccountNonExpired()) {
             throw new UserIsLoggedInException();
         }
 
-        if (!user.getPassword().equals(authRequest.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
 
-        if (revokeAllUserTokens(user.getEmail())) {
-            String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-            saveTokenInDB(accessJwt, TokenType.ACCESS, user);
+        revokeAllUserTokens(user.getEmail());
 
-            String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
-            saveTokenInDB(refreshJwt, TokenType.REFRESH, user);
+        String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
+        saveTokenInDB(accessJwt, TokenType.ACCESS, user);
 
-            return AuthenticationResponseDto.builder()
-                    .user(user)
-                    .accessJwt(accessJwt)
-                    .refreshJwt(refreshJwt)
-                    .build();
-        }
+        String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
+        saveTokenInDB(refreshJwt, TokenType.REFRESH, user);
 
-        return null;
+        return AuthenticationResponseDto.builder()
+                .user(user)
+                .accessJwt(accessJwt)
+                .refreshJwt(refreshJwt)
+                .build();
     }
 
     public String refreshAccessToken(String refreshJwt) throws UserNotFoundException {
@@ -171,7 +171,7 @@ public class AuthenticationService {
         return false;
     }
 
-    public Boolean revokeAllUserTokens(String email) {
+    public void revokeAllUserTokens(String email) {
         var userTokens = tokenRepository.findAllValidTokensByUser(email);
 
         if (!userTokens.isEmpty()) {
@@ -182,12 +182,9 @@ public class AuthenticationService {
 
             try {
                 tokenRepository.saveAll(userTokens);
-                return true;
             } catch (TransactionalException e) {
                 e.printStackTrace();
             }
         }
-
-        return false;
     }
 }

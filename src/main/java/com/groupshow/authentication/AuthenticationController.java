@@ -17,8 +17,8 @@ public class AuthenticationController {
     private AuthenticationService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
-        return ResponseEntity.ok(authService.registerNewUser(regRequest));
+    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto request) throws Exception {
+        return ResponseEntity.ok(authService.registerNewUser(request));
     }
 
     @GetMapping("/activate-account")
@@ -30,13 +30,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequest) throws UserNotFoundException, InvalidCredentialsException {
-        return ResponseEntity.ok(authService.resetPassword(resetPasswordRequest));
+    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto request) throws UserNotFoundException, InvalidCredentialsException {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto authRequest) throws Exception {
-        var authResponseDto = authService.authenticateUser(authRequest);
+    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto request) throws Exception {
+        var authResponseDto = authService.authenticateUser(request);
 
         var headers = new HttpHeaders();
         headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
