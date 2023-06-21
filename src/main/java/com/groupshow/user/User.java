@@ -122,10 +122,9 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-//        return tokens.stream()
-//                .anyMatch(token -> token.getTokenType().equals(TokenType.REFRESH)
-//                        && !token.getIsExpired());
-        return true;
+        return tokens.stream()
+                .anyMatch(token -> token.getTokenType().equals(TokenType.REFRESH)
+                        && !token.getIsExpired());
     }
 
     @Override
@@ -140,7 +139,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-//        return isAccountActivated;
-        return true;
+        return isAccountActivated;
     }
 }
