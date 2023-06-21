@@ -32,9 +32,6 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
-    @Autowired
-    private JwtService jwtService;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
