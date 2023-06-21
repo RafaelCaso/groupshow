@@ -3,7 +3,6 @@ package com.groupshow.authentication;
 import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserIsLoggedInException;
 import com.groupshow.exceptions.UserNotFoundException;
-import com.groupshow.security.ApplicationConfig;
 import com.groupshow.token.Token;
 import com.groupshow.token.TokenRepository;
 import com.groupshow.token.TokenType;
@@ -16,19 +15,15 @@ import com.groupshow.utilities.TokenGenerator;
 import java.io.IOException;
 
 import jakarta.transaction.TransactionalException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenRepository tokenRepository;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private ApplicationConfig applicationConfig;
+    private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private final JwtService jwtService;
 
     public Boolean registerNewUser(RegisterRequestDto regRequest) throws UserNotFoundException {
         String defaultPassword = TokenGenerator.createNewToken();
@@ -78,11 +73,10 @@ public class AuthenticationService {
             var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new UserNotFoundException("email"));
 
-            if (user.isEnabled() && user.getPassword().equals(request.getCurrentPassword())) {
+            if (user.getIsAccountActivated() && user.getPassword().equals(request.getCurrentPassword())) {
 //                String hashedPassword = applicationConfig.passwordEncoder().encode(request.getNewPassword());
 
-                String hashedPassword = "";
-                user.setPassword(hashedPassword);
+                user.setPassword(request.getCurrentPassword());
 
                 userRepository.save(user);
                 return true;

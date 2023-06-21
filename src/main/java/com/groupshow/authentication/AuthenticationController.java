@@ -3,7 +3,7 @@ package com.groupshow.authentication;
 import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserNotFoundException;
 import com.groupshow.user.User;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
-@RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authService;
+    @Autowired
+    private AuthenticationService authService;
 
     @PostMapping("/register")
     public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
