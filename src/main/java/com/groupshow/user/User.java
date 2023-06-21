@@ -7,12 +7,15 @@ import com.groupshow.artwork.photograph.Photograph;
 import com.groupshow.artwork.song.Song;
 import com.groupshow.artwork.video.Video;
 import com.groupshow.artwork.writing.Writing;
+import com.groupshow.security.JwtService;
 import com.groupshow.token.Token;
+import com.groupshow.token.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +31,9 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
+
+    @Autowired
+    private JwtService jwtService;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -119,7 +125,9 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return tokens.stream()
+                .anyMatch(token -> token.getTokenType().equals(TokenType.REFRESH)
+                        && !token.getIsExpired());
     }
 
     @Override
@@ -134,6 +142,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isAccountActivated;
     }
 }

@@ -19,6 +19,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
@@ -36,18 +37,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
+        final String accessJwt = authHeader.substring(7);
+        final String userEmail = jwtService.extractUsername(accessJwt);
 
         // if the userEmail exists but Spring Security has not authenticated the user yet
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            var isTokenValid = tokenRepository.findByJwt(jwt)
+            var isTokenValid = tokenRepository.findByJwt(accessJwt)
                     .map(token -> !token.getIsExpired() && !token.getIsRevoked())
                     .orElse(false);
 
-            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+            if (jwtService.isTokenValid(accessJwt, userDetails) && isTokenValid) {
                 var usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

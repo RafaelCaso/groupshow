@@ -1,26 +1,20 @@
 package com.groupshow.authentication;
 
+import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserNotFoundException;
-import com.groupshow.security.LogoutService;
 import com.groupshow.user.User;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authService;
-
-    @Autowired
-    private LogoutService logoutService;
+    private final AuthenticationService authService;
 
     @PostMapping("/register")
     public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
@@ -31,23 +25,23 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> activateNewUser(
             @RequestParam(name = "userID") Integer userID,
             @RequestParam(name = "regToken") String registrationToken)
-            throws Exception {
+            throws UserNotFoundException {
         return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequest) throws Exception {
+    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequest) throws UserNotFoundException, InvalidCredentialsException {
         return ResponseEntity.ok(authService.resetPassword(resetPasswordRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto authRequest, HttpServletResponse response) throws Exception {
-        var authResponseDto = authService.login(authRequest);
+    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto authRequest) throws Exception {
+        var authResponseDto = authService.authenticateUser(authRequest);
 
         var headers = new HttpHeaders();
         headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
         headers.add("Authorization", "Bearer " + authResponseDto.getAccessJwt());
-        headers.add("X-Refresh-Token", authResponseDto.getRefreshJwt().toString());
+        headers.add("X-Refresh-Token", authResponseDto.getRefreshJwt());
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -55,12 +49,18 @@ public class AuthenticationController {
     }
 
     @GetMapping("/refresh-access")
-    public ResponseEntity<String> refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
-        return ResponseEntity.ok(authService.refreshAccessToken(refreshToken));
+    public ResponseEntity.BodyBuilder refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
+        String newAccessJwt = authService.refreshAccessToken(refreshToken);
+
+        var headers = new HttpHeaders();
+        headers.add("Access-Control-Expose-Headers", "Authorization");
+        headers.add("Authorization", "Bearer " + newAccessJwt);
+
+        return ResponseEntity.ok().headers(headers);
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) throws IOException {
+    public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) {
         return ResponseEntity.ok(authService.forgotPassword(userEmail));
     }
 }

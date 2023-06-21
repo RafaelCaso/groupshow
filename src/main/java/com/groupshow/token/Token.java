@@ -20,6 +20,7 @@ public class Token {
     @Column(name = "token_id")
     private Integer tokenID;
 
+    @Column(unique = true)
     private String jwt;
 
     @Enumerated(EnumType.STRING)

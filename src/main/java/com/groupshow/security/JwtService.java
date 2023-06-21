@@ -18,6 +18,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
     Dotenv dotenv = Dotenv.load();
     private final String SECRET_KEY = dotenv.get("JWT_SECRET_KEY");
     private final static Long JWT_ACCESS_EXP_TIME_MS = 1000 * 60 * 30L;
@@ -59,26 +60,15 @@ public class JwtService {
                     .setClaims(extraClaims)
                     .setSubject(userDetails.getUsername())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + getExpirationTimeMs(tokenType)))
+                    .setExpiration(new Date(System.currentTimeMillis() + getTokenExpirationTimeMs(tokenType)))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
-    }
-
-    private Long getExpirationTimeMs(TokenType tokenType) {
-        if (tokenType.equals(TokenType.ACCESS)) {
-            return JWT_ACCESS_EXP_TIME_MS;
-        } else if (tokenType.equals(TokenType.REFRESH)) {
-            return JWT_REFRESH_EXP_TIME_MS;
-        } else {
-            return 0L;
-        }
     }
 
     public Boolean isTokenValid(String jwt, UserDetails userDetails) {
         // "username" is actually the user email
         final String username = extractUsername(jwt);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(jwt);
-
     }
 
     private Boolean isTokenExpired(String jwt) {
@@ -87,5 +77,15 @@ public class JwtService {
 
     private Date extractExpiration(String jwt) {
         return extractClaim(jwt, Claims::getExpiration);
+    }
+
+    private Long getTokenExpirationTimeMs(TokenType tokenType) {
+        if (tokenType.equals(TokenType.ACCESS)) {
+            return JWT_ACCESS_EXP_TIME_MS;
+        } else if (tokenType.equals(TokenType.REFRESH)) {
+            return JWT_REFRESH_EXP_TIME_MS;
+        } else {
+            return 0L;
+        }
     }
 }

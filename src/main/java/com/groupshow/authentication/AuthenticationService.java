@@ -3,6 +3,7 @@ package com.groupshow.authentication;
 import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserIsLoggedInException;
 import com.groupshow.exceptions.UserNotFoundException;
+import com.groupshow.security.ApplicationConfig;
 import com.groupshow.token.Token;
 import com.groupshow.token.TokenRepository;
 import com.groupshow.token.TokenType;
@@ -13,17 +14,21 @@ import com.groupshow.utilities.Emailer;
 import com.groupshow.utilities.TokenGenerator;
 
 import java.io.IOException;
-import java.util.List;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.TransactionalException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
-    private final JwtService jwtService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private ApplicationConfig applicationConfig;
 
     public Boolean registerNewUser(RegisterRequestDto regRequest) throws UserNotFoundException {
         String defaultPassword = TokenGenerator.createNewToken();
@@ -68,17 +73,16 @@ public class AuthenticationService {
         return false;
     }
 
-    public Boolean resetPassword(ResetPasswordRequestDto resetPasswordRequest) throws UserNotFoundException, InvalidCredentialsException {
-        // Checks that new password is written correctly
-        if (resetPasswordRequest.getNewPassword().equals(resetPasswordRequest.getConfirmNewPassword())) {
-            var user = userRepository.findByEmail(resetPasswordRequest.getEmail())
+    public Boolean resetPassword(ResetPasswordRequestDto request) throws UserNotFoundException, InvalidCredentialsException {
+        if (request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new UserNotFoundException("email"));
 
-            // Checks that user knows their original password in order to reset it
-            if (user.getIsAccountActivated() && user.getPassword().equals(resetPasswordRequest.getCurrentPassword())) {
-                user.setPassword(resetPasswordRequest.getNewPassword());
+            if (user.isEnabled() && user.getPassword().equals(request.getCurrentPassword())) {
+//                String hashedPassword = applicationConfig.passwordEncoder().encode(request.getNewPassword());
 
-               // has the password before saving it in db
+                String hashedPassword = "";
+                user.setPassword(hashedPassword);
 
                 userRepository.save(user);
                 return true;
@@ -89,7 +93,7 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthenticationResponseDto login(AuthenticationRequestDto authRequest) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
+    public AuthenticationResponseDto authenticateUser(AuthenticationRequestDto authRequest) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
         var user = userRepository.findByEmail(authRequest.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("email"));
 
@@ -101,33 +105,31 @@ public class AuthenticationService {
             throw new InvalidCredentialsException();
         }
 
-        revokeAllUserTokens(user);
+        if (revokeAllUserTokens(user.getEmail())) {
+            String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
+            saveTokenInDB(accessJwt, TokenType.ACCESS, user);
 
-        String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-        saveToken(accessJwt, TokenType.ACCESS, user);
+            String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
+            saveTokenInDB(refreshJwt, TokenType.REFRESH, user);
 
-        String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
-        saveToken(refreshJwt, TokenType.REFRESH, user);
+            return AuthenticationResponseDto.builder()
+                    .user(user)
+                    .accessJwt(accessJwt)
+                    .refreshJwt(refreshJwt)
+                    .build();
+        }
 
-        return AuthenticationResponseDto.builder()
-                .user(user)
-                .accessJwt(accessJwt)
-                .refreshJwt(refreshJwt)
-                .build();
+        return null;
     }
 
     public String refreshAccessToken(String refreshJwt) throws UserNotFoundException {
-        // Use the refresh jwt to find the saved refresh token in db
-        var userRefreshToken = tokenRepository.findByJwt(refreshJwt)
+        Token userRefreshToken = tokenRepository.findByJwt(refreshJwt)
                 .orElseThrow(() -> new UserNotFoundException("refresh token"));
-
-        // Use the saved refresh token to find its user
         var user = userRefreshToken.getUser();
 
         if (jwtService.isTokenValid(refreshJwt, user)) {
             // Find and revoke the user's existing access token
-            user.getTokens()
-                    .stream()
+            user.getTokens().stream()
                     .filter(token -> token.getTokenType().equals(TokenType.ACCESS))
                     .forEach(token -> {
                         token.setIsExpired(true);
@@ -138,25 +140,11 @@ public class AuthenticationService {
             String newAccessJwt = jwtService.generateToken(user, TokenType.ACCESS);
 
             // Create a new access token and save it in db
-            saveToken(newAccessJwt, TokenType.ACCESS, user);
-            return newAccessJwt;
+            if (saveTokenInDB(newAccessJwt, TokenType.ACCESS, user)) {
+                return newAccessJwt;
+            }
         }
         return null;
-    }
-
-    private void revokeAllUserTokens(User user) {
-        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserID());
-
-        if (validUserTokens.isEmpty()) {
-            return;
-        }
-
-        validUserTokens.forEach(token -> {
-            token.setIsExpired(true);
-            token.setIsRevoked(true);
-        });
-
-        tokenRepository.saveAll(validUserTokens);
     }
 
     public Boolean forgotPassword(String userEmail) {
@@ -164,21 +152,48 @@ public class AuthenticationService {
             Emailer.sendPasswordResetEmail(userEmail);
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
-            return false;
         }
+
+        return false;
     }
 
-    private void saveToken(String token, TokenType tokenType, User user) {
+    private Boolean saveTokenInDB(String jwt, TokenType tokenType, User user) throws TransactionalException {
         var newToken = Token.builder()
-                .jwt(token)
+                .jwt(jwt)
                 .tokenType(tokenType)
                 .isExpired(false)
                 .isRevoked(false)
                 .user(user)
                 .build();
 
-        tokenRepository.save(newToken);
+        try {
+            tokenRepository.save(newToken);
+            return true;
+        } catch (TransactionalException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Boolean revokeAllUserTokens(String email) {
+        var userTokens = tokenRepository.findAllValidTokensByUser(email);
+
+        if (!userTokens.isEmpty()) {
+            userTokens.forEach(token -> {
+                token.setIsExpired(true);
+                token.setIsRevoked(true);
+            });
+
+            try {
+                tokenRepository.saveAll(userTokens);
+                return true;
+            } catch (TransactionalException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 }
