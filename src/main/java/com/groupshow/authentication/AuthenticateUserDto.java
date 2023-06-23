@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class AuthenticationResponseDto {
+public class AuthenticateUserDto {
     private User user;
+    private String accessJwt;
     private LocalDateTime accessJwtExpiresOn;
+    private String refreshJwt;
     private LocalDateTime refreshJwtExpiresOn;
 }

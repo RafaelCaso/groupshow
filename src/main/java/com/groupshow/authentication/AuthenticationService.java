@@ -13,9 +13,12 @@ import com.groupshow.utilities.Emailer;
 import com.groupshow.utilities.TokenGenerator;
 
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
+import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +27,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public Boolean registerNewUser(RegisterRequestDto regRequest) throws UserNotFoundException {
         String defaultPassword = TokenGenerator.createNewToken();
@@ -68,17 +72,15 @@ public class AuthenticationService {
         return false;
     }
 
-    public Boolean resetPassword(ResetPasswordRequestDto resetPasswordRequest) throws UserNotFoundException, InvalidCredentialsException {
-        // Checks that new password is written correctly
-        if (resetPasswordRequest.getNewPassword().equals(resetPasswordRequest.getConfirmNewPassword())) {
-            var user = userRepository.findByEmail(resetPasswordRequest.getEmail())
+    public Boolean resetPassword(ResetPasswordRequestDto request) throws UserNotFoundException, InvalidCredentialsException {
+        if (request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new UserNotFoundException("email"));
 
-            // Checks that user knows their original password in order to reset it
-            if (user.getIsAccountActivated() && user.getPassword().equals(resetPasswordRequest.getCurrentPassword())) {
-                user.setPassword(resetPasswordRequest.getNewPassword());
+            if (user.isEnabled() && user.getPassword().equals(request.getCurrentPassword())) {
+                String hashedPassword = passwordEncoder.encode(request.getNewPassword());
 
-               // has the password before saving it in db
+                user.setPassword(hashedPassword);
 
                 userRepository.save(user);
                 return true;
@@ -89,74 +91,55 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthenticationResponseDto login(AuthenticationRequestDto authRequest) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
-        var user = userRepository.findByEmail(authRequest.getEmail())
+    public AuthenticateUserDto authenticateUser(AuthenticationRequestDto request)
+            throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("email"));
 
-        if (!user.getTokens().isEmpty()) {
+        if (user.isAccountNonExpired()) {
             throw new UserIsLoggedInException();
         }
 
-        if (!user.getPassword().equals(authRequest.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
 
-        revokeAllUserTokens(user);
+        revokeAllUserTokens(user.getEmail());
 
         String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-        saveToken(accessJwt, TokenType.ACCESS, user);
+        Token accessToken = createNewToken(accessJwt, TokenType.ACCESS, user);
 
         String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
-        saveToken(refreshJwt, TokenType.REFRESH, user);
+        Token refreshToken = createNewToken(refreshJwt, TokenType.REFRESH, user);
 
-        return AuthenticationResponseDto.builder()
+        return AuthenticateUserDto.builder()
                 .user(user)
-                .accessJwt(accessJwt)
-                .refreshJwt(refreshJwt)
+                .accessJwt(accessToken.getJwt())
+                .accessJwtExpiresOn(accessToken.getExpiresOn())
+                .refreshJwt(refreshToken.getJwt())
+                .refreshJwtExpiresOn(refreshToken.getExpiresOn())
                 .build();
     }
 
     public String refreshAccessToken(String refreshJwt) throws UserNotFoundException {
-        // Use the refresh jwt to find the saved refresh token in db
-        var userRefreshToken = tokenRepository.findByJwt(refreshJwt)
+        Token userRefreshToken = tokenRepository.findByJwt(refreshJwt)
                 .orElseThrow(() -> new UserNotFoundException("refresh token"));
-
-        // Use the saved refresh token to find its user
         var user = userRefreshToken.getUser();
 
         if (jwtService.isTokenValid(refreshJwt, user)) {
             // Find and revoke the user's existing access token
-            user.getTokens()
-                    .stream()
+            user.getTokens().stream()
                     .filter(token -> token.getTokenType().equals(TokenType.ACCESS))
                     .forEach(token -> {
                         token.setIsExpired(true);
                         token.setIsRevoked(true);
                     });
 
-            // Create a new access jwt
             String newAccessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-
-            // Create a new access token and save it in db
-            saveToken(newAccessJwt, TokenType.ACCESS, user);
+            createNewToken(newAccessJwt, TokenType.ACCESS, user);
             return newAccessJwt;
         }
         return null;
-    }
-
-    private void revokeAllUserTokens(User user) {
-        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserID());
-
-        if (validUserTokens.isEmpty()) {
-            return;
-        }
-
-        validUserTokens.forEach(token -> {
-            token.setIsExpired(true);
-            token.setIsRevoked(true);
-        });
-
-        tokenRepository.saveAll(validUserTokens);
     }
 
     public Boolean forgotPassword(String userEmail) {
@@ -164,21 +147,42 @@ public class AuthenticationService {
             Emailer.sendPasswordResetEmail(userEmail);
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
-            return false;
         }
+
+        return false;
     }
 
-    private void saveToken(String token, TokenType tokenType, User user) {
+    private Token createNewToken(String jwt, TokenType tokenType, User user) {
+        var expDate = jwtService.extractExpiration(jwt);
+        var expDateTime = LocalDateTime.ofInstant(expDate.toInstant(), ZoneId.systemDefault());
+
         var newToken = Token.builder()
-                .jwt(token)
+                .jwt(jwt)
                 .tokenType(tokenType)
+                .expiresOn(expDateTime)
                 .isExpired(false)
                 .isRevoked(false)
                 .user(user)
                 .build();
 
-        tokenRepository.save(newToken);
+        return tokenRepository.save(newToken);
+    }
+
+    public void revokeAllUserTokens(String email) {
+        var userTokens = tokenRepository.findAllValidTokensByUser(email);
+
+        if (!userTokens.isEmpty()) {
+            userTokens.forEach(token -> {
+                token.setIsExpired(true);
+                token.setIsRevoked(true);
+            });
+
+            try {
+                tokenRepository.saveAll(userTokens);
+            } catch (TransactionalException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

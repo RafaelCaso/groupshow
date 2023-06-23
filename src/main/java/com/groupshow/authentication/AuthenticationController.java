@@ -1,15 +1,11 @@
 package com.groupshow.authentication;
 
+import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserNotFoundException;
-import com.groupshow.security.LogoutService;
-import com.groupshow.user.User;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,48 +15,57 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authService;
 
-    @Autowired
-    private LogoutService logoutService;
-
     @PostMapping("/register")
-    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto regRequest) throws Exception {
-        return ResponseEntity.ok(authService.registerNewUser(regRequest));
+    public ResponseEntity<Boolean> registerNewUser(@RequestBody RegisterRequestDto request) throws Exception {
+        return ResponseEntity.ok(authService.registerNewUser(request));
     }
 
     @GetMapping("/activate-account")
     public ResponseEntity<Boolean> activateNewUser(
             @RequestParam(name = "userID") Integer userID,
             @RequestParam(name = "regToken") String registrationToken)
-            throws Exception {
+            throws UserNotFoundException {
         return ResponseEntity.ok(authService.activateNewUser(userID, registrationToken));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequest) throws Exception {
-        return ResponseEntity.ok(authService.resetPassword(resetPasswordRequest));
+    public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto request) throws UserNotFoundException, InvalidCredentialsException {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto authRequest, HttpServletResponse response) throws Exception {
-        var authResponseDto = authService.login(authRequest);
+    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto request) throws Exception {
+        var authUserDto = authService.authenticateUser(request);
+
+        var authResponseDto = AuthenticationResponseDto.builder()
+                .user(authUserDto.getUser())
+                .accessJwtExpiresOn(authUserDto.getAccessJwtExpiresOn())
+                .refreshJwtExpiresOn(authUserDto.getRefreshJwtExpiresOn())
+                .build();
 
         var headers = new HttpHeaders();
         headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
-        headers.add("Authorization", "Bearer " + authResponseDto.getAccessJwt());
-        headers.add("X-Refresh-Token", authResponseDto.getRefreshJwt().toString());
+        headers.add("Authorization", "Bearer " + authUserDto.getAccessJwt());
+        headers.add("X-Refresh-Token", authUserDto.getRefreshJwt());
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(authResponseDto.getUser());
+                .body(authResponseDto);
     }
 
     @GetMapping("/refresh-access")
-    public ResponseEntity<String> refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
-        return ResponseEntity.ok(authService.refreshAccessToken(refreshToken));
+    public ResponseEntity.BodyBuilder refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
+        String newAccessJwt = authService.refreshAccessToken(refreshToken);
+
+        var headers = new HttpHeaders();
+        headers.add("Access-Control-Expose-Headers", "Authorization");
+        headers.add("Authorization", "Bearer " + newAccessJwt);
+
+        return ResponseEntity.ok().headers(headers);
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) throws IOException {
+    public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "email") String userEmail) {
         return ResponseEntity.ok(authService.forgotPassword(userEmail));
     }
 }

@@ -8,6 +8,7 @@ import com.groupshow.artwork.song.Song;
 import com.groupshow.artwork.video.Video;
 import com.groupshow.artwork.writing.Writing;
 import com.groupshow.token.Token;
+import com.groupshow.token.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,12 +67,12 @@ public class User implements UserDetails {
 	@Column(name = "is_account_activated", nullable = false)
 	private Boolean isAccountActivated;
 
-    @Column(name = "creation_datetime")
-    private LocalDateTime creationDatetime;
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
 
     @PrePersist
-    public void prePersistCreationDate() {
-        creationDatetime = LocalDateTime.now();
+    public void prePersistCreatedOn() {
+        createdOn = LocalDateTime.now();
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -119,7 +120,9 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return tokens.stream()
+                .anyMatch(token -> token.getTokenType().equals(TokenType.REFRESH)
+                        && !token.getIsExpired());
     }
 
     @Override
@@ -134,6 +137,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isAccountActivated;
     }
 }
