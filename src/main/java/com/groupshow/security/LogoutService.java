@@ -1,6 +1,7 @@
 package com.groupshow.security;
 
 import com.groupshow.authentication.AuthenticationService;
+import com.groupshow.exceptions.UserIsLoggedInException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class LogoutService implements LogoutHandler {
                        Authentication authentication
     ) {
         final String authHeader = request.getHeader("Authorization");
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }

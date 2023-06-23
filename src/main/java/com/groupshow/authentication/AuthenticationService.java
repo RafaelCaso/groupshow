@@ -13,6 +13,8 @@ import com.groupshow.utilities.Emailer;
 import com.groupshow.utilities.TokenGenerator;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +91,8 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthenticationResponseDto authenticateUser(AuthenticationRequestDto request) throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
+    public AuthenticateUserDto authenticateUser(AuthenticationRequestDto request)
+            throws UserNotFoundException, UserIsLoggedInException, InvalidCredentialsException {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("email"));
 
@@ -104,15 +107,17 @@ public class AuthenticationService {
         revokeAllUserTokens(user.getEmail());
 
         String accessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-        saveTokenInDB(accessJwt, TokenType.ACCESS, user);
+        Token accessToken = createNewToken(accessJwt, TokenType.ACCESS, user);
 
         String refreshJwt = jwtService.generateToken(user, TokenType.REFRESH);
-        saveTokenInDB(refreshJwt, TokenType.REFRESH, user);
+        Token refreshToken = createNewToken(refreshJwt, TokenType.REFRESH, user);
 
-        return AuthenticationResponseDto.builder()
+        return AuthenticateUserDto.builder()
                 .user(user)
-                .accessJwt(accessJwt)
-                .refreshJwt(refreshJwt)
+                .accessJwt(accessToken.getJwt())
+                .accessJwtExpiresOn(accessToken.getExpiresOn())
+                .refreshJwt(refreshToken.getJwt())
+                .refreshJwtExpiresOn(refreshToken.getExpiresOn())
                 .build();
     }
 
@@ -130,13 +135,9 @@ public class AuthenticationService {
                         token.setIsRevoked(true);
                     });
 
-            // Create a new access jwt
             String newAccessJwt = jwtService.generateToken(user, TokenType.ACCESS);
-
-            // Create a new access token and save it in db
-            if (saveTokenInDB(newAccessJwt, TokenType.ACCESS, user)) {
-                return newAccessJwt;
-            }
+            createNewToken(newAccessJwt, TokenType.ACCESS, user);
+            return newAccessJwt;
         }
         return null;
     }
@@ -152,23 +153,20 @@ public class AuthenticationService {
         return false;
     }
 
-    private Boolean saveTokenInDB(String jwt, TokenType tokenType, User user) throws TransactionalException {
+    private Token createNewToken(String jwt, TokenType tokenType, User user) {
+        var expDate = jwtService.extractExpiration(jwt);
+        var expDateTime = LocalDateTime.ofInstant(expDate.toInstant(), ZoneId.systemDefault());
+
         var newToken = Token.builder()
                 .jwt(jwt)
                 .tokenType(tokenType)
+                .expiresOn(expDateTime)
                 .isExpired(false)
                 .isRevoked(false)
                 .user(user)
                 .build();
 
-        try {
-            tokenRepository.save(newToken);
-            return true;
-        } catch (TransactionalException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return tokenRepository.save(newToken);
     }
 
     public void revokeAllUserTokens(String email) {

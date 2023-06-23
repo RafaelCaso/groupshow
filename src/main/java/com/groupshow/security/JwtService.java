@@ -60,7 +60,7 @@ public class JwtService {
                     .setClaims(extraClaims)
                     .setSubject(userDetails.getUsername())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + getTokenExpirationTimeMs(tokenType)))
+                    .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs(tokenType)))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
     }
@@ -75,11 +75,11 @@ public class JwtService {
         return extractExpiration(jwt).before(new Date());
     }
 
-    private Date extractExpiration(String jwt) {
+    public Date extractExpiration(String jwt) {
         return extractClaim(jwt, Claims::getExpiration);
     }
 
-    private Long getTokenExpirationTimeMs(TokenType tokenType) {
+    private Long jwtExpirationMs(TokenType tokenType) {
         if (tokenType.equals(TokenType.ACCESS)) {
             return JWT_ACCESS_EXP_TIME_MS;
         } else if (tokenType.equals(TokenType.REFRESH)) {

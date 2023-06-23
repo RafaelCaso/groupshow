@@ -2,7 +2,6 @@ package com.groupshow.authentication;
 
 import com.groupshow.exceptions.InvalidCredentialsException;
 import com.groupshow.exceptions.UserNotFoundException;
-import com.groupshow.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +34,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody AuthenticationRequestDto request) throws Exception {
-        var authResponseDto = authService.authenticateUser(request);
+    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto request) throws Exception {
+        var authUserDto = authService.authenticateUser(request);
+
+        var authResponseDto = AuthenticationResponseDto.builder()
+                .user(authUserDto.getUser())
+                .accessJwtExpiresOn(authUserDto.getAccessJwtExpiresOn())
+                .refreshJwtExpiresOn(authUserDto.getRefreshJwtExpiresOn())
+                .build();
 
         var headers = new HttpHeaders();
         headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
-        headers.add("Authorization", "Bearer " + authResponseDto.getAccessJwt());
-        headers.add("X-Refresh-Token", authResponseDto.getRefreshJwt());
+        headers.add("Authorization", "Bearer " + authUserDto.getAccessJwt());
+        headers.add("X-Refresh-Token", authUserDto.getRefreshJwt());
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(authResponseDto.getUser());
+                .body(authResponseDto);
     }
 
     @GetMapping("/refresh-access")

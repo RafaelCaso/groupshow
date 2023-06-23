@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -26,6 +28,17 @@ public class Token {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TokenType tokenType;
+
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
+
+    @PrePersist
+    public void prePersistCreatedOn() {
+        createdOn = LocalDateTime.now();
+    }
+
+    @Column(name = "expires_on")
+    private LocalDateTime expiresOn;
 
     @Column(name = "is_expired", nullable = false)
     private Boolean isExpired;
