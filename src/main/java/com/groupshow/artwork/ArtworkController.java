@@ -2,6 +2,7 @@ package com.groupshow.artwork;
 
 import com.groupshow.artwork.painting.PaintingDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/artwork")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class ArtworkController {
 
     @Autowired
@@ -17,7 +18,17 @@ public class ArtworkController {
 
     @GetMapping("/get-twenty")
     public ResponseEntity<List<Artwork>> getTwentyMostRecentArtworks() {
-        return ResponseEntity.ok(artworkService.getTwentyMostRecentArtworks());
+        var headers = new HttpHeaders();
+        headers.add("Access-Control-Request-Headers", "*");
+        headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
+
+        System.out.print(ResponseEntity.ok()
+                .headers(headers)
+                .body(artworkService.getTwentyMostRecentArtworks()));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(artworkService.getTwentyMostRecentArtworks());
     }
 
     @GetMapping("?artworkID={artworkID}")

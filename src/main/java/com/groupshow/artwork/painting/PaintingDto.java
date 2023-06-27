@@ -1,5 +1,6 @@
 package com.groupshow.artwork.painting;
 
+import com.groupshow.artwork.ArtworkType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import lombok.Data;
 @Builder
 public class PaintingDto {
     private String title;
+    private ArtworkType artworkType;
     private String artistStatement;
     private Integer artistID;
     private String bucketUrl;

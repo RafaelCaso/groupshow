@@ -19,6 +19,7 @@ public class PaintingService {
         var painting = new Painting();
 
         painting.setTitle(paintingDto.getTitle());
+        painting.setArtworkType(paintingDto.getArtworkType());
         painting.setArtistStatement(paintingDto.getArtistStatement());
         painting.setArtist(artist);
         painting.setBucketUrl(paintingDto.getBucketUrl());

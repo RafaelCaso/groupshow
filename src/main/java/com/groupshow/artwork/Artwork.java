@@ -19,6 +19,10 @@ public abstract class Artwork {
     @Column(name = "artwork_id")
     private Integer artworkID;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "artwork_type", nullable = false)
+    private ArtworkType artworkType;
+
     @Column(nullable = false)
     private String title;
 

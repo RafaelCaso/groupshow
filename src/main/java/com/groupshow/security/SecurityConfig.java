@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 // Whitelist any requests that match the following patterns
-                .requestMatchers("/auth/register", "/auth/activate-account", "/auth/reset-password", "/auth/login")
+                .requestMatchers("/**", "/auth/register", "/auth/activate-account", "/auth/reset-password", "/auth/login", "/auth/refresh-access")
                 .permitAll()
                 // All other requests must be authenticated
                 .anyRequest()
