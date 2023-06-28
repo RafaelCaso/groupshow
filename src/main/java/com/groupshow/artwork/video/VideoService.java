@@ -21,6 +21,7 @@ public class VideoService {
         var video = new Video();
 
         video.setTitle(videoDto.getTitle());
+        video.setArtworkType(videoDto.getArtworkType());
         video.setArtistStatement(videoDto.getArtistStatement());
         video.setArtist(artist);
         video.setBucketUrl(videoDto.getBucketUrl());

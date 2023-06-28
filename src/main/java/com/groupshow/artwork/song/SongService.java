@@ -21,6 +21,7 @@ public class SongService {
         var song = new Song();
 
         song.setTitle(songDto.getTitle());
+        song.setArtworkType(songDto.getArtworkType());
         song.setArtistStatement(songDto.getArtistStatement());
         song.setArtist(artist);
         song.setBucketUrl(songDto.getBucketUrl());

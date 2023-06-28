@@ -31,17 +31,18 @@ public class ArtworkController {
                 .body(artworkService.getTwentyMostRecentArtworks());
     }
 
-    @GetMapping("?artworkID={artworkID}")
+    @GetMapping("/{artworkID}")
     public ResponseEntity<Artwork> getSingleArtworkByID(@PathVariable Integer artworkID) {
         return ResponseEntity.ok(artworkService.getSingleArtworkByID(artworkID));
     }
-
-    @GetMapping("/all?userID={userID}")
+    
+    
+    @GetMapping("/all/{userID}")
     public ResponseEntity<List<Artwork>> getAllArtworkByUserID(@PathVariable Integer userID) {
         return ResponseEntity.ok(artworkService.getAllArtworkByUserID(userID));
     }
 
-    @GetMapping("/all?userID={userID}&artworkType={artworkType}")
+    @GetMapping("/all/{userID}/{artworkType}")
     public ResponseEntity<List<? extends Artwork>> getAllArtworkByType(@PathVariable Integer userID, @PathVariable String artworkType) {
         switch (artworkType) {
             case "painting":
@@ -61,7 +62,7 @@ public class ArtworkController {
         }
     }
 
-    @GetMapping("?artworkID={artworkID}&critiqueStatus={critiqueStatus}")
+    @GetMapping("/set-status/{artworkID}/{critiqueStatus}")
     public ResponseEntity<Boolean> setCritiqueStatus(@PathVariable Integer artworkID, @PathVariable String critiqueStatus) {
         return ResponseEntity.ok(artworkService.setCritiqueStatus(artworkID, critiqueStatus));
     }

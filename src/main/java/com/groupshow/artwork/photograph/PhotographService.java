@@ -21,6 +21,7 @@ public class PhotographService {
 		var photograph = new Photograph();
 
 		photograph.setTitle(photographDto.getTitle());
+		photograph.setArtworkType(photographDto.getArtworkType());
 		photograph.setArtistStatement(photographDto.getArtistStatement());
 		photograph.setArtist(artist);
 		photograph.setBucketUrl(photographDto.getBucketUrl());

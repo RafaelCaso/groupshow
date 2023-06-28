@@ -19,6 +19,7 @@ public class PerformanceService {
         var performance = new Performance();
 
         performance.setTitle(performanceDto.getTitle());
+        performance.setArtworkType(performanceDto.getArtworkType());
         performance.setArtistStatement(performanceDto.getArtistStatement());
         performance.setArtist(artist);
         performance.setBucketUrl(performanceDto.getBucketUrl());
