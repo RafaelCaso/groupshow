@@ -44,7 +44,6 @@ public class AuthenticationController {
                 .build();
 
         var headers = new HttpHeaders();
-        headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
         headers.add("Authorization", "Bearer " + authUserDto.getAccessJwt());
         headers.add("X-Refresh-Token", authUserDto.getRefreshJwt());
 
@@ -54,14 +53,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/refresh-access")
-    public ResponseEntity.BodyBuilder refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
+    public ResponseEntity<Boolean> refreshAccessToken(@RequestHeader("X-Refresh-Token") String refreshToken) throws UserNotFoundException {
         String newAccessJwt = authService.refreshAccessToken(refreshToken);
 
         var headers = new HttpHeaders();
-        headers.add("Access-Control-Expose-Headers", "Authorization");
         headers.add("Authorization", "Bearer " + newAccessJwt);
 
-        return ResponseEntity.ok().headers(headers);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(true);
     }
 
     @PostMapping("/forgot-password")

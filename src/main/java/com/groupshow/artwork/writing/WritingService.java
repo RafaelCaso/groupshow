@@ -21,6 +21,7 @@ public class WritingService {
 		var writing = new Writing();
 
 		writing.setTitle(writingDto.getTitle());
+		writing.setArtworkType(writingDto.getArtworkType());
 		writing.setArtistStatement(writingDto.getArtistStatement());
 		writing.setArtist(artist);
 		writing.setType(writingDto.getType());

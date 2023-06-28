@@ -2,6 +2,7 @@ package com.groupshow.artwork;
 
 import com.groupshow.artwork.painting.PaintingDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,20 +18,31 @@ public class ArtworkController {
 
     @GetMapping("/get-twenty")
     public ResponseEntity<List<Artwork>> getTwentyMostRecentArtworks() {
-        return ResponseEntity.ok(artworkService.getTwentyMostRecentArtworks());
+        var headers = new HttpHeaders();
+        headers.add("Access-Control-Request-Headers", "*");
+        headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
+
+        System.out.print(ResponseEntity.ok()
+                .headers(headers)
+                .body(artworkService.getTwentyMostRecentArtworks()));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(artworkService.getTwentyMostRecentArtworks());
     }
 
-    @GetMapping("?artworkID={artworkID}")
+    @GetMapping("/{artworkID}")
     public ResponseEntity<Artwork> getSingleArtworkByID(@PathVariable Integer artworkID) {
         return ResponseEntity.ok(artworkService.getSingleArtworkByID(artworkID));
     }
-
-    @GetMapping("/all?userID={userID}")
+    
+    
+    @GetMapping("/all/{userID}")
     public ResponseEntity<List<Artwork>> getAllArtworkByUserID(@PathVariable Integer userID) {
         return ResponseEntity.ok(artworkService.getAllArtworkByUserID(userID));
     }
 
-    @GetMapping("/all?userID={userID}&artworkType={artworkType}")
+    @GetMapping("/all/{userID}/{artworkType}")
     public ResponseEntity<List<? extends Artwork>> getAllArtworkByType(@PathVariable Integer userID, @PathVariable String artworkType) {
         switch (artworkType) {
             case "painting":
@@ -50,7 +62,7 @@ public class ArtworkController {
         }
     }
 
-    @GetMapping("?artworkID={artworkID}&critiqueStatus={critiqueStatus}")
+    @GetMapping("/set-status/{artworkID}/{critiqueStatus}")
     public ResponseEntity<Boolean> setCritiqueStatus(@PathVariable Integer artworkID, @PathVariable String critiqueStatus) {
         return ResponseEntity.ok(artworkService.setCritiqueStatus(artworkID, critiqueStatus));
     }
