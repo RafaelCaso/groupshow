@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://127.0.0.1:5173")
 public class AuthenticationController {
 
     @Autowired
@@ -44,6 +44,7 @@ public class AuthenticationController {
                 .build();
 
         var headers = new HttpHeaders();
+        headers.add("Access-Control-Expose-Headers", "Authorization, X-Refresh-Token");
         headers.add("Authorization", "Bearer " + authUserDto.getAccessJwt());
         headers.add("X-Refresh-Token", authUserDto.getRefreshJwt());
 
