@@ -1,8 +1,6 @@
 package com.groupshow.artwork;
 
-import com.groupshow.artwork.painting.PaintingDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +8,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/artwork")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://127.0.0.1:5173")
+
 public class ArtworkController {
 
     @Autowired
@@ -18,16 +17,7 @@ public class ArtworkController {
 
     @GetMapping("/get-twenty")
     public ResponseEntity<List<Artwork>> getTwentyMostRecentArtworks() {
-        var headers = new HttpHeaders();
-        headers.add("Access-Control-Request-Headers", "*");
-        headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
-
-        System.out.print(ResponseEntity.ok()
-                .headers(headers)
-                .body(artworkService.getTwentyMostRecentArtworks()));
-
         return ResponseEntity.ok()
-                .headers(headers)
                 .body(artworkService.getTwentyMostRecentArtworks());
     }
 
@@ -44,22 +34,15 @@ public class ArtworkController {
 
     @GetMapping("/all/{userID}/{artworkType}")
     public ResponseEntity<List<? extends Artwork>> getAllArtworkByType(@PathVariable Integer userID, @PathVariable String artworkType) {
-        switch (artworkType) {
-            case "painting":
-                return ResponseEntity.ok(artworkService.getAllUserPaintings(userID));
-            case "performance":
-                return ResponseEntity.ok(artworkService.getAllUserPerformances(userID));
-            case "photograph":
-                return ResponseEntity.ok(artworkService.getAllUserPhotographs(userID));
-            case "song":
-                return ResponseEntity.ok(artworkService.getAllUserSongs(userID));
-            case "video":
-                return ResponseEntity.ok(artworkService.getAllUserVideos(userID));
-            case "writing":
-                return ResponseEntity.ok(artworkService.getAllUserWritings(userID));
-            default:
-                throw new RuntimeException("The given artwork type is not valid.");
-        }
+        return switch (artworkType) {
+            case "painting" -> ResponseEntity.ok(artworkService.getAllUserPaintings(userID));
+            case "performance" -> ResponseEntity.ok(artworkService.getAllUserPerformances(userID));
+            case "photograph" -> ResponseEntity.ok(artworkService.getAllUserPhotographs(userID));
+            case "song" -> ResponseEntity.ok(artworkService.getAllUserSongs(userID));
+            case "video" -> ResponseEntity.ok(artworkService.getAllUserVideos(userID));
+            case "writing" -> ResponseEntity.ok(artworkService.getAllUserWritings(userID));
+            default -> throw new RuntimeException("The given artwork type is not valid.");
+        };
     }
 
     @GetMapping("/set-status/{artworkID}/{critiqueStatus}")
