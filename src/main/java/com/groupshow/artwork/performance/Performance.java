@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @Table(name="performances")
 public class Performance extends Artwork {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PerformanceType type;
+    private PerformanceType performanceType;
 
     @Column(name = "duration_hours", nullable = false)
     private Integer durationHours;

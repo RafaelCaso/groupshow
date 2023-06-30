@@ -15,7 +15,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Emailer {
 
 	private final static String backendUrlBase = "http://localhost:8000";
-	private final static String frontendUrlBase = "http://localhost:3000";
+	private final static String frontendUrlBase = "http://localhost:5173";
 	private final static Dotenv dotenv = Dotenv.load();
 	private final static SendGrid sendGrid = new SendGrid(dotenv.get("SENDGRID_API_KEY"));
 
@@ -27,7 +27,7 @@ public class Emailer {
 				"Your school has registered you for Group Show!\n\n" +
 				"Your temporary password is " + user.getPassword() + "\n\n" +
 				"Please follow the link below to activate your account:\n\n" +
-				backendUrlBase + "/auth/activate-account?userID=" + user.getUserID() + "&regToken=" + user.getRegistrationToken());
+				frontendUrlBase + "/auth/activate-account/" + user.getUserID() + "/" + user.getRegistrationToken());
 
 		// the above url actually needs to send the user to the frontend
 		// when that frontend component loads, React should trigger the backend route

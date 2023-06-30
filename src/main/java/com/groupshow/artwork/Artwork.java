@@ -9,9 +9,9 @@ import com.groupshow.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+@Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
 public abstract class Artwork {
 
     @Id

@@ -17,7 +17,7 @@ public class Writing extends Artwork {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WritingType type;
+    private WritingType writingType;
 
     @Column(name = "is_fiction", nullable = false)
     private Boolean isFiction;

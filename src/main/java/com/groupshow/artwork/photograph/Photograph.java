@@ -1,12 +1,13 @@
 package com.groupshow.artwork.photograph;
 
 import com.groupshow.artwork.Artwork;
+import com.groupshow.artwork.ArtworkUnits;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @Table(name = "photographs")
 public class Photograph extends Artwork {
@@ -16,7 +17,7 @@ public class Photograph extends Artwork {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PhotographUnits units;
+    private ArtworkUnits artworkUnits;
 
     @Column(nullable = false)
     private Double width;
