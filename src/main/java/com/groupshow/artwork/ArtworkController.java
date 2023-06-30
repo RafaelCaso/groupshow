@@ -9,7 +9,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/artwork")
 @CrossOrigin(origins = "http://127.0.0.1:5173")
-
 public class ArtworkController {
 
     @Autowired
@@ -17,8 +16,7 @@ public class ArtworkController {
 
     @GetMapping("/get-twenty")
     public ResponseEntity<List<Artwork>> getTwentyMostRecentArtworks() {
-        return ResponseEntity.ok()
-                .body(artworkService.getTwentyMostRecentArtworks());
+        return ResponseEntity.ok(artworkService.getTwentyMostRecentArtworks());
     }
 
     @GetMapping("/{artworkID}")

@@ -27,7 +27,7 @@ public class PhotographService {
 		photograph.setBucketUrl(photographDto.getBucketUrl());
 		photograph.setIsOpenForCritique(photographDto.getIsOpenForCritique());
 		photograph.setIsPrinted(photographDto.getIsPrinted());
-		photograph.setUnits(photographDto.getUnits());
+		photograph.setArtworkUnits(photographDto.getUnits());
 		photograph.setWidth(photographDto.getWidth());
 		photograph.setHeight(photographDto.getHeight());
 

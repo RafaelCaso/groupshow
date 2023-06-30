@@ -61,12 +61,6 @@ public class User implements UserDetails {
     @Column(length = 100)
     private String minor;
 
-    @Column(name = "registration_token", unique = true, length = 36, nullable = false)
-    private String registrationToken;
-
-	@Column(name = "is_account_activated", nullable = false)
-	private Boolean isAccountActivated;
-
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
@@ -74,6 +68,12 @@ public class User implements UserDetails {
     public void prePersistCreatedOn() {
         createdOn = LocalDateTime.now();
     }
+
+    @Column(name = "registration_token", unique = true, length = 36, nullable = false)
+    private String registrationToken;
+
+	@Column(name = "is_account_activated", nullable = false)
+	private Boolean isAccountActivated;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore

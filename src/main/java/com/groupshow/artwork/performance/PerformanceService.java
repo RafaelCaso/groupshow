@@ -4,7 +4,6 @@ import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +23,7 @@ public class PerformanceService {
         performance.setArtist(artist);
         performance.setBucketUrl(performanceDto.getBucketUrl());
         performance.setIsOpenForCritique(performanceDto.getIsOpenForCritique());
-        performance.setType(performanceDto.getType());
+        performance.setPerformanceType(performanceDto.getType());
         performance.setDurationHours(performanceDto.getDurationHours());
         performance.setDurationMins(performanceDto.getDurationMins());
         performance.setDurationSecs(performanceDto.getDurationSecs());

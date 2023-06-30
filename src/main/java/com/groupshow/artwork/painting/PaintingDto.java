@@ -1,6 +1,7 @@
 package com.groupshow.artwork.painting;
 
 import com.groupshow.artwork.ArtworkType;
+import com.groupshow.artwork.ArtworkUnits;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class PaintingDto {
     private String bucketUrl;
     private Boolean isOpenForCritique;
     private PaintingType type;
-    private PaintingUnits units;
+    private ArtworkUnits artworkUnits;
     private Double width;
     private Double height;
 }
