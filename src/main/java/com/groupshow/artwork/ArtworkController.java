@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/artwork")
-@CrossOrigin(origins = "http://127.0.0.1:5173")
+//@CrossOrigin(origins = "*")
 public class ArtworkController {
 
     @Autowired

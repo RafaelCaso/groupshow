@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://127.0.0.1:5173")
+//@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -32,7 +32,6 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> resetPassword(@RequestBody ResetPasswordRequestDto request) throws UserNotFoundException, InvalidCredentialsException {
         return ResponseEntity.ok(authService.resetPassword(request));
     }
-
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto request) throws Exception {
         var authUserDto = authService.authenticateUser(request);
