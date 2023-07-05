@@ -14,7 +14,7 @@ public class VideoDto {
 	private Integer artistID;
 	private String bucketUrl;
 	private Boolean isOpenForCritique;
-	private VideoType type;
+	private VideoType videoType;
 	private Integer durationHours;
 	private Integer durationMins;
 	private Integer durationSecs;

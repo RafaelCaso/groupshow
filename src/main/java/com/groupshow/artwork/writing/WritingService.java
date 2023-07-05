@@ -24,10 +24,10 @@ public class WritingService {
 		writing.setArtworkType(writingDto.getArtworkType());
 		writing.setArtistStatement(writingDto.getArtistStatement());
 		writing.setArtist(artist);
-		writing.setWritingType(writingDto.getType());
+		writing.setWritingType(writingDto.getWritingType());
 		writing.setBucketUrl(writingDto.getBucketUrl());
 		writing.setIsOpenForCritique(writingDto.getIsOpenForCritique());
-		writing.setIsFiction(writingDto.getIsFiction());
+		writing.setIsFiction(true);
 		writing.setWordCount(writingDto.getWordCount());
 
 		writingRepository.save(writing);

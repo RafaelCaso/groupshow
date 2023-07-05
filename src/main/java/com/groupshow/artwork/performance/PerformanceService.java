@@ -23,7 +23,7 @@ public class PerformanceService {
         performance.setArtist(artist);
         performance.setBucketUrl(performanceDto.getBucketUrl());
         performance.setIsOpenForCritique(performanceDto.getIsOpenForCritique());
-        performance.setPerformanceType(performanceDto.getType());
+        performance.setPerformanceType(performanceDto.getPerformanceType());
         performance.setDurationHours(performanceDto.getDurationHours());
         performance.setDurationMins(performanceDto.getDurationMins());
         performance.setDurationSecs(performanceDto.getDurationSecs());

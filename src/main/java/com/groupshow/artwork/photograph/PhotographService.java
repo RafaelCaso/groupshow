@@ -1,5 +1,6 @@
 package com.groupshow.artwork.photograph;
 
+import com.groupshow.artwork.ArtworkUnits;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class PhotographService {
 		photograph.setArtist(artist);
 		photograph.setBucketUrl(photographDto.getBucketUrl());
 		photograph.setIsOpenForCritique(photographDto.getIsOpenForCritique());
-		photograph.setIsPrinted(photographDto.getIsPrinted());
-		photograph.setArtworkUnits(photographDto.getUnits());
+		photograph.setIsPrinted(true);
+		photograph.setArtworkUnits(ArtworkUnits.IN);
 		photograph.setWidth(photographDto.getWidth());
 		photograph.setHeight(photographDto.getHeight());
 

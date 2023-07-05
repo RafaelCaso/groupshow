@@ -1,5 +1,6 @@
 package com.groupshow.artwork.painting;
 
+import com.groupshow.artwork.ArtworkUnits;
 import com.groupshow.user.User;
 import com.groupshow.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -24,8 +25,8 @@ public class PaintingService {
         painting.setArtist(artist);
         painting.setBucketUrl(paintingDto.getBucketUrl());
         painting.setIsOpenForCritique(paintingDto.getIsOpenForCritique());
-        painting.setPaintingType(paintingDto.getType());
-        painting.setArtworkUnits(paintingDto.getArtworkUnits());
+        painting.setPaintingType(paintingDto.getPaintingType());
+        painting.setArtworkUnits(ArtworkUnits.IN);
         painting.setWidth(paintingDto.getWidth());
         painting.setHeight(paintingDto.getHeight());
 

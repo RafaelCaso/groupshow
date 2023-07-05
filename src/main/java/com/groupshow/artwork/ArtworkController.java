@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/artwork")
-//@CrossOrigin(origins = "*")
 public class ArtworkController {
 
     @Autowired
@@ -23,7 +22,6 @@ public class ArtworkController {
     public ResponseEntity<Artwork> getSingleArtworkByID(@PathVariable Integer artworkID) {
         return ResponseEntity.ok(artworkService.getSingleArtworkByID(artworkID));
     }
-    
     
     @GetMapping("/all/{userID}")
     public ResponseEntity<List<Artwork>> getAllArtworkByUserID(@PathVariable Integer userID) {

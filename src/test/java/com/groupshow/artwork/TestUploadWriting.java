@@ -46,7 +46,7 @@ public class TestUploadWriting {
     		writing.setArtworkURL("testURL");
     		writing.setFiction(false);
     		writing.setWordCount(1000);
-    		writing.setType(WritingType.POEM);
+    		writing.setWritingType(WritingType.POEM);
     		writing.setArtistID(1);
     		
     		Writing savedWriting = writingController.uploadWriting(writing);
@@ -62,7 +62,7 @@ public class TestUploadWriting {
     		assertEquals(savedWriting.getBucketUrl(), writing.getArtworkURL());
     		assertEquals(savedWriting.isFiction(), writing.getFiction());
     		assertEquals(savedWriting.getWordCount(), writing.getWordCount());
-    		assertEquals(savedWriting.getArtworkType(), writing.getType());
+    		assertEquals(savedWriting.getArtworkType(), writing.getWritingType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

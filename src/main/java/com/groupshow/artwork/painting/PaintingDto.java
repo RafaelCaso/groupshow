@@ -14,7 +14,7 @@ public class PaintingDto {
     private Integer artistID;
     private String bucketUrl;
     private Boolean isOpenForCritique;
-    private PaintingType type;
+    private PaintingType paintingType;
     private ArtworkUnits artworkUnits;
     private Double width;
     private Double height;

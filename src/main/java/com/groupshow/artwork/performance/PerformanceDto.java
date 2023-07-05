@@ -14,7 +14,7 @@ public class PerformanceDto {
     private Integer artistID;
     private String bucketUrl;
     private Boolean isOpenForCritique;
-    private PerformanceType type;
+    private PerformanceType performanceType;
     private Integer durationHours;
     private Integer durationMins;
     private Integer durationSecs;

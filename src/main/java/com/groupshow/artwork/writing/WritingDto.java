@@ -14,7 +14,7 @@ public class WritingDto {
 	private Integer artistID;
 	private String bucketUrl;
 	private Boolean isOpenForCritique;
-	private WritingType type;
+	private WritingType writingType;
 	private Boolean isFiction;
 	private Integer wordCount;
 
